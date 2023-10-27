@@ -1,7 +1,8 @@
 
 # Student diary - Dzienniczek uczniowski
 
-🇺🇸 Web application developed for a project on software testing and quality 
+🇺🇸 Web application developed for a project on software testing and quality
+
 🇵🇱 Aplikacja internetowa stworzona na potrzeby projektu z testowania i jakości oprogramowania
 
 ## Run Locally - Uruchom program lokalnie
