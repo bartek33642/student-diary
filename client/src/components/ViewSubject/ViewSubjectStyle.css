@@ -1,6 +1,6 @@
 .view-subject-container{
     background-color: #1C489D;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .view-subject-h1{

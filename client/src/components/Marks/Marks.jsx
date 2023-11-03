@@ -3,6 +3,7 @@ import "./MarksStyle.css"
 import { TableMarks } from "./TableMarks/TableMarks";
 import { RiMenuFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { CalculatorOfAverage } from "./CalculatorOfAverage/CalculatorOfAverage";
 
 
 export const Marks = () => {
@@ -31,6 +32,7 @@ export const Marks = () => {
                     Sprawdź, jaka wychodzi Ci średnia ważona - <br />
                     Kalkulator średniej
                     </h2>
+                    <CalculatorOfAverage />
                 </div>
             </div>
         </div>

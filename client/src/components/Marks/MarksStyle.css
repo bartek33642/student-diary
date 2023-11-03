@@ -1,6 +1,6 @@
 .marks-container{
     background-color: #1C489D;
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .marks-hr{
@@ -18,4 +18,14 @@
     margin-top: 50px;
     text-align: center;
     color: #fff;
+    margin-bottom: 50px;
 }
+
+
+
+@media (max-width: 400px) {
+    .marks-h2{
+        font-size: 14pt;
+        word-wrap: break-word;
+    }
+  }
