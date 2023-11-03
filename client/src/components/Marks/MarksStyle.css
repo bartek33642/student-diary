@@ -1,0 +1,21 @@
+.marks-container{
+    background-color: #1C489D;
+    height: 100vh;
+}
+
+.marks-hr{
+    width: 70%;
+    margin: auto; 
+    border: solid 1.5px #fff;
+    border-radius: 20px;
+}
+
+.elements-marks-view{
+    margin-bottom: 50px;
+}
+
+.marks-h2{
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+}

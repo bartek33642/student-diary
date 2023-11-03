@@ -58,7 +58,7 @@ export const HomePage = () => {
             Dodaj przedmioty szkolne:
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Nazwa: <Input type="text" value="nazwa przedmiotu" />
+            Nazwa: <Input type="text"/>
             <Input type="submit" value="Zapisz"/>
           </Typography>
         </Box>

@@ -1,0 +1,12 @@
+.table-of-grades{
+    background-color: gray;
+    text-align: center;
+    border: solid black 1px;
+    min-height: 90px;
+    margin: auto;
+
+}
+.marks-table-th, .marks-table-td{
+    border: solid black 1px;
+    min-width: 120px;
+}
