@@ -43,11 +43,23 @@ async function createOrUpdate(data) {
 
 async function deleteSubject(id) {
   try {
-    return await SubjectModel.findOneAndRemove({ subjectId: id });
+    const result = await SubjectModel.findOneAndDelete({ _id: id });
+    
+    if (!result) {
+      console.log("Dokument do usunięcia nie został znaleziony.");
+    } else {
+      console.log("Przedmiot został pomyślnie usunięty.");
+    }
+
+    return result;
   } catch (error) {
+    console.error('Błąd podczas usuwania przedmiotu:', error);
     throw new Error(`Błąd w trakcie usuwania przedmiotu: ${error.message}`);
   }
 }
+
+
+
 
 export default {
   query: query,
