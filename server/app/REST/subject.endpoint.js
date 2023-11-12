@@ -19,26 +19,38 @@ export const subjectEndpoint = (router) => {
   // Pobierz przedmiot o określonym ID
   router.get('/subjects/:id', async (req, res) => {
     const subjectId = req.params.id;
-    const nameSubject = req.params.name;
-
+  
     if (!isValidObjectId(subjectId)) {
       return res.status(400).json({ error: 'Nieprawidłowy format ID przedmiotu.' });
     }
-
+  
     try {
-      const subject = await business.getSubjectsManager(subjectId).query();
-      console.log("subjectName: ", nameSubject);
-      if (!subject) {
+      const subjectArray = await business.getSubjectsManager(subjectId).query();
+      console.log("Co zwraca stała subject:", subjectArray);
+  
+      if (!subjectArray || subjectArray.length === 0) {
         return res.status(404).json({ error: 'Przedmiot o podanym ID nie istnieje.' });
       }
-
-      // res.status(200).send(subjectId);
-      res.json(subjectId);
+  
+      const nameOfSubject = subjectArray.find(subject => subject._id.toString() === subjectId);
+      
+      if (!nameOfSubject) {
+        return res.status(404).json({ error: 'Przedmiot o podanym ID nie istnieje.' });
+      }
+  
+      const subjectName = nameOfSubject.name;
+  
+      res.json({ name: subjectName });
     } catch (error) {
       console.error('Błąd podczas pobierania przedmiotu:', error);
       res.status(500).json({ error: 'Wystąpił błąd podczas pobierania przedmiotu.' });
     }
   });
+  
+  
+  
+  
+
 
   // Dodaj nowy przedmiot
   router.post('/subjects', [
