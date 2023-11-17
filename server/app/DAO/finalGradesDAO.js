@@ -16,7 +16,7 @@ finalGradesSchema.plugin(mongooseUniqueValidator);
 const FinalGradeModel = mongoose.model('finalGrades', finalGradesSchema);
 
 async function createOrUpdateFinalGrade(data) {
-  const subjectExists = await SubjectModel.exists({ subjectId: data.subjectId });
+  const subjectExists = await SubjectModel.model.findOne({ _id: data.subjectId });
   if (!subjectExists) {
     throw new Error('Przedmiot o podanym subjectId nie istnieje.');
   }
@@ -28,12 +28,12 @@ async function createOrUpdateFinalGrade(data) {
   if (!data.finalGradeId) {
     return new FinalGradeModel(data).save();
   } else {
-    return FinalGradeModel.findByIdAndUpdate(data.finalGradeId, data, { new: true });
+    return FinalGradeModel.findOneAndUpdate({ finalGradeId: data.finalGradeId }, data, { new: true });
   }
 }
 
 async function getFinalGradesBySubject(subjectId) {
-  const subjectExists = await SubjectModel.exists({ subjectId: subjectId });
+  const subjectExists = await SubjectModel.model.findOne({ _id: subjectId });
   if (!subjectExists) {
     throw new Error('Przedmiot o podanym subjectId nie istnieje.');
   }
@@ -42,7 +42,7 @@ async function getFinalGradesBySubject(subjectId) {
 }
 
 async function deleteFinalGrade(finalGradeId) {
-  return FinalGradeModel.findByIdAndRemove(finalGradeId);
+  return FinalGradeModel.findOneAndDelete({_id: finalGradeId});
 }
 
 export default {

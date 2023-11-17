@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import mongooseUniqueValidator from 'mongoose-unique-validator';
 import { v4 as uuidv4 } from 'uuid';
-import SubjectModel from './subjectsDAO'; // Załóżmy, że masz plik subjectsDAO.js
+import subjectsDAO from './subjectsDAO';
 
 const gradesSchema = new mongoose.Schema({
   gradeId: { type: String, unique: true, default: () => uuidv4() },
@@ -18,33 +18,56 @@ gradesSchema.plugin(mongooseUniqueValidator);
 const GradeModel = mongoose.model('grades', gradesSchema);
 
 async function createOrUpdateGrade(data) {
-  const subjectExists = await SubjectModel.exists({ subjectId: data.subjectId });
-  if (!subjectExists) {
-    throw new Error('Przedmiot o podanym subjectId nie istnieje.');
-  }
+  try {
+    console.log('Checking if subject exists...');
+    const subject = await subjectsDAO.model.findOne({ _id: data.subjectId });
+    const subjectExists = subject !== null;
+    if (!subjectExists) {
+      throw new Error('Przedmiot o podanym subjectId nie istnieje.');
+    }
 
-  if (!mongoose.isValidObjectId(data.subjectId)) {
-    throw new Error('Nieprawidłowy format subjectId.');
-  }
+    if (!mongoose.isValidObjectId(data.subjectId)) {
+      throw new Error('Nieprawidłowy format subjectId.');
+    }
 
-  if (!data.gradeId) {
-    return new GradeModel(data).save();
-  } else {
-    return GradeModel.findByIdAndUpdate(data.gradeId, data, { new: true });
+    if (!data.gradeId) {
+      console.log('Creating new grade...');
+      return new GradeModel(data).save();
+    } else {
+      console.log('Updating existing grade...');
+      return GradeModel.findByIdAndUpdate(data.gradeId, data, { new: true });
+    }
+  } catch (error) {
+    console.error(`Error in createOrUpdateGrade: ${error.message}`);
+    throw error;
   }
 }
 
 async function getGradesBySubject(subjectId) {
-  const subjectExists = await SubjectModel.exists({ subjectId: subjectId });
-  if (!subjectExists) {
-    throw new Error('Przedmiot o podanym subjectId nie istnieje.');
-  }
+  try {
+    console.log('Checking if subject exists...');
+    const subject = await subjectsDAO.model.findOne({ _id: subjectId });
+    const subjectExists = subject !== null;
+    if (!subjectExists) {
+      throw new Error('Przedmiot o podanym subjectId nie istnieje.');
+    }
 
-  return GradeModel.find({ subjectId: subjectId });
+    console.log('Fetching grades for subject...');
+    return GradeModel.find({ subjectId: subjectId });
+  } catch (error) {
+    console.error(`Error in getGradesBySubject: ${error.message}`);
+    throw error;
+  }
 }
 
 async function deleteGrade(gradeId) {
-  return GradeModel.findByIdAndRemove(gradeId);
+  try {
+    console.log('Deleting grade...');
+    return GradeModel.findOneAndDelete({_id: gradeId});
+  } catch (error) {
+    console.error(`Error in deleteGrade: ${error.message}`);
+    throw error;
+  }
 }
 
 export default {
