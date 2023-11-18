@@ -14,6 +14,7 @@ export const TableMarks = () => {
   const [subjects, setSubjects] = useState([]);
   const [finalGrades, setFinalGrades] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 
 
   useEffect(() => {
@@ -87,7 +88,93 @@ const groupGradesBySubject = (grades) => {
   return groupedGrades;
 };
 
-  // console.log('grades:', grades);
+const handleAddGradeClick = async (subjectId) => {
+  const newGrade = window.prompt('Wprowadź nową ocenę:');
+  const newWeight = window.prompt('Wprowadź wagę oceny:');
+  const newComment = window.prompt('Wprowadź komentarz:');
+
+  console.log('New Grade:', newGrade);
+  console.log('New Weight:', newWeight);
+  console.log('New Comment:', newComment);
+  console.log('Subject ID:', subjectId);
+
+  if (newGrade !== null && newWeight !== null && newComment !== null) {
+    try {
+      // Pobierz identyfikator przedmiotu na podstawie jego nazwy
+      const subject = subjects.find((sub) => sub.name === subjectId);
+
+      if (!subject) {
+        console.error('Przedmiot o nazwie', subjectId, 'nie został znaleziony.');
+        return;
+      }
+
+      // Wywołaj odpowiedni endpoint do dodawania oceny
+      const addGradeEndpoint = `http://localhost:3001/grades`;
+      const response = await fetch(addGradeEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          value: parseFloat(newGrade),
+          weight: parseFloat(newWeight),
+          comment: newComment,
+          subjectId: subject._id,  // Użyj identyfikatora przedmiotu
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Nowa ocena została dodana.');
+        // Pobierz ponownie dane z bazy, aby odświeżyć widok
+        fetchData();
+      } else {
+        console.error('Błąd podczas dodawania nowej oceny:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Błąd podczas komunikacji z serwerem:', error.message);
+    }
+  }
+};
+
+const handleAddFinalGradeClick = async (subjectId) => {
+  const newFinalGrade = window.prompt('Wprowadź nową ocenę końcową:');
+  console.log('New Final Grade:', newFinalGrade);
+
+  if (newFinalGrade !== null) {
+    try {
+      // Pobierz identyfikator przedmiotu na podstawie jego nazwy
+      const subject = subjects.find((sub) => sub.name === subjectId);
+      
+      // Wywołaj odpowiedni endpoint do dodawania oceny końcowej
+      const addFinalGradeEndpoint = `http://localhost:3001/finalGrades`;
+      const response = await fetch(addFinalGradeEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          value: parseFloat(newFinalGrade),
+          subjectId: subject._id,
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Nowa ocena końcowa została dodana.');
+        // Pobierz ponownie dane z bazy, aby odświeżyć widok
+        fetchData();
+      } else {
+        console.error('Błąd podczas dodawania nowej oceny końcowej:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Błąd podczas komunikacji z serwerem:', error.message);
+    }
+  }
+};
+
+
+
+
+  console.log('grades:', grades);
   // console.log('finalGrades:', finalGrades);
 
   // Dodaj warunek, aby sprawdzić, czy dane są dostępne przed renderowaniem
@@ -117,7 +204,10 @@ const groupGradesBySubject = (grades) => {
             return (
               <tr key={subject} className="marks-table-tr">
                 <td className="marks-table-td">{subject}</td>
-                <td className="marks-table-td">{values.join(', ')}</td>
+                <td className="marks-table-td">{values.join(', ')} {/* Przycisk "+" do otwierania modala */}
+                  <button onClick={() => handleAddGradeClick(subject)}>
+                    +
+                  </button></td>
                 
                 <td className="marks-table-td">{countArithmeticAverage(values)}</td>
                 <td className="marks-table-td">{countWeightedAverage(values, grades, subject)}</td>
@@ -126,11 +216,9 @@ const groupGradesBySubject = (grades) => {
                 <td className="marks-table-td">
                 {/* Wstaw odpowiednie pole dla oceny końcowej */}
                 {finalGrades[subject] && finalGrades[subject][0] && finalGrades[subject][0].value}
+                <button onClick={() => handleAddFinalGradeClick(subject)}>+</button>
                 </td>
-               
               </tr>
-              
-              
             );
             
           })}
