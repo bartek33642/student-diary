@@ -120,8 +120,7 @@ export const TableMarks = () => {
                 {/* Wstaw odpowiednie pole dla oceny końcowej */}
                 {finalGrades[subject] && finalGrades[subject][0] && finalGrades[subject][0].value}
                 </td>
-                <td><p>Średnia z całego roku:  {fullYearAverage(finalGrades)}</p></td>
-                <td>Czy jest świadectwo z pakiem: {isCertificateWithHonors(fullYearAverage)}</td>
+               
               </tr>
               
               
@@ -129,9 +128,18 @@ export const TableMarks = () => {
             
           })}
         </tbody>
-      </table>
+      </table> 
 
-      
+      <hr className="marks-hr table-marks-hr" />
+
+          <div className="elements-marks-view">
+            <h2 className="marks-h2">
+              Twoja średnia z całego roku: {fullYearAverage(finalGrades)} 
+              <br />
+              Świadectwo z paskiem: {isCertificateWithHonors(fullYearAverage)} 
+            </h2>
+          </div>
+
     </div>
   );
 };

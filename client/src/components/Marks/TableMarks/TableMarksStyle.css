@@ -10,6 +10,10 @@
     min-width: 120px;
 }
 
+.table-marks-hr {
+    margin-top: 50px;
+}
+
 
 @media (max-width: 915px) {
     .marks-table-tr {
