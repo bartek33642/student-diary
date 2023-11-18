@@ -11,6 +11,7 @@ import { isCertificateWithHonors } from "../../../functionality/isCertificateWit
 import { Tooltip as TippyTooltip } from 'react-tippy';
 
 export const TableMarks = () => {
+
   const [grades, setGrades] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [finalGrades, setFinalGrades] = useState({});
@@ -65,19 +66,20 @@ export const TableMarks = () => {
 
   const groupGradesBySubject = (grades) => {
     const groupedGrades = {};
-
+  
     subjects.forEach((subject) => {
       groupedGrades[subject._id] = [];
     });
-
+  
     grades.forEach((grade) => {
       groupedGrades[grade.subjectId].push(grade._id);
     });
-
+  
     console.log('groupedGrades:', groupedGrades);
-
+  
     return groupedGrades;
   };
+  
 
   const handleAddGradeClick = async (subjectId) => {
     const newGrade = window.prompt('Wprowadź nową ocenę:');
@@ -124,14 +126,22 @@ export const TableMarks = () => {
     }
   };
 
+  const getFinalGradesForSubject = (finalGrades, subjectName) => {
+    if (finalGrades.hasOwnProperty(subjectName)) {
+      return finalGrades[subjectName].map(finalGrade => finalGrade.value);
+    } else {
+      return [];
+    }
+  };
+  
   const handleAddFinalGradeClick = async (subjectId) => {
     const newFinalGrade = window.prompt('Wprowadź nową ocenę końcową:');
     console.log('New Final Grade:', newFinalGrade);
-
+  
     if (newFinalGrade !== null) {
       try {
         const subject = subjects.find((sub) => sub._id === subjectId);
-
+  
         const addFinalGradeEndpoint = `http://localhost:3001/finalGrades`;
         const response = await fetch(addFinalGradeEndpoint, {
           method: 'POST',
@@ -143,7 +153,7 @@ export const TableMarks = () => {
             subjectId: subject._id,
           }),
         });
-
+  
         if (response.ok) {
           console.log('Nowa ocena końcowa została dodana.');
           fetchData();
@@ -155,6 +165,38 @@ export const TableMarks = () => {
       }
     }
   };
+  
+  // const handleAddFinalGradeClick = async (subjectId) => {
+  //   const newFinalGrade = window.prompt('Wprowadź nową ocenę końcową:');
+  //   console.log('New Final Grade:', newFinalGrade);
+
+  //   if (newFinalGrade !== null) {
+  //     try {
+  //       const subject = subjects.find((sub) => sub._id === subjectId);
+
+  //       const addFinalGradeEndpoint = `http://localhost:3001/finalGrades`;
+  //       const response = await fetch(addFinalGradeEndpoint, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           value: parseFloat(newFinalGrade),
+  //           subjectId: subject._id,
+  //         }),
+  //       });
+
+  //       if (response.ok) {
+  //         console.log('Nowa ocena końcowa została dodana.');
+  //         fetchData();
+  //       } else {
+  //         console.error('Błąd podczas dodawania nowej oceny końcowej:', response.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.error('Błąd podczas komunikacji z serwerem:', error.message);
+  //     }
+  //   }
+  // };
 
   const handleGradeClick = async (subjectId, gradeId) => {
     const newWeight = window.prompt('Wprowadź wagę oceny:');
@@ -227,8 +269,11 @@ export const TableMarks = () => {
         </thead>
         <tbody>
         {grades && grades.length > 0 && Object.entries(groupGradesBySubject(grades)).map(([subjectId, gradeIds]) => {
+
     const subject = subjects.find(sub => sub._id === subjectId);
     const values = gradeIds.map(gradeId => grades.find(g => g._id === gradeId).value);
+    const finalGradesForSubject = getFinalGradesForSubject(finalGrades, subject?.name || '');
+
     return (
         <tr key={subjectId} className="marks-table-tr">
             <td className="marks-table-td">{subject ? subject.name : ''}</td>
@@ -256,9 +301,13 @@ export const TableMarks = () => {
             <td className="marks-table-td">{median(values)}</td>
             <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subjectId))}</td>
             <td className="marks-table-td">
-                {finalGrades[subjectId] && finalGrades[subjectId][0] && finalGrades[subjectId][0].value}
-                <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subjectId)}>+</button>
-            </td>
+            {finalGradesForSubject.length > 0 ? finalGradesForSubject[0] : 'Brak oceny'}
+  <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subjectId)}>+</button>
+</td>
+
+
+
+
         </tr>
     );
 })}
@@ -271,7 +320,7 @@ export const TableMarks = () => {
         <h2 className="marks-h2">
           Twoja średnia z całego roku: {fullYearAverage(finalGrades)}
           <br />
-          Świadectwo z paskiem: {isCertificateWithHonors(fullYearAverage)}
+          Świadectwo z paskiem: {isCertificateWithHonors(fullYearAverage(finalGrades))}
         </h2>
       </div>
     </div>
