@@ -14,7 +14,6 @@ export const TableMarks = () => {
   const [subjects, setSubjects] = useState([]);
   const [finalGrades, setFinalGrades] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 
 
   useEffect(() => {
@@ -88,7 +87,7 @@ const groupGradesBySubject = (grades) => {
   return groupedGrades;
 };
 
-const handleAddGradeClick = async (subjectId) => {
+  const handleAddGradeClick = async (subjectId) => {
   const newGrade = window.prompt('Wprowadź nową ocenę:');
   const newWeight = window.prompt('Wprowadź wagę oceny:');
   const newComment = window.prompt('Wprowadź komentarz:');
@@ -170,9 +169,6 @@ const handleAddFinalGradeClick = async (subjectId) => {
     }
   }
 };
-
-
-
 
   console.log('grades:', grades);
   // console.log('finalGrades:', finalGrades);
