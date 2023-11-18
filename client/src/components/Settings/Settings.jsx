@@ -12,9 +12,17 @@ export const Settings = () => {
                 </div>
 
                 <h1 className="settings-h1">
-                    Ustawienia
+                    O aplikacji
                 </h1>
 
+        <div className="information-about-app">
+            <h5>
+                <p>Aplikacja ta jest projektem zrealizowanym w ramach przedmiotu Testowanie i jakość oprogramowania.</p>
+                <p>Jest to dzienniczek elektroniczny dla uczniów.</p>
+                <p>Umożliwia dodawanie przedmiotów, ocen oraz sprawdzanie średnich dla ucznia.</p>
+                <p>Wersja aplikacji: 1.0</p>
+            </h5>
+            </div>
                 
 
 

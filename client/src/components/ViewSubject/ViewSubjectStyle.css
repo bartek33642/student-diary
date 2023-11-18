@@ -7,3 +7,21 @@
     color: #fff;
     text-align: center;
 }
+
+.table-div-container {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subject-table {
+    width: 40%;
+    text-align: center;
+    background-color: rgb(196, 196, 196);
+}
+
+.table-subject-table-td {
+    border: 1px solid rgb(59, 59, 59);
+    border-collapse: collapse;
+}

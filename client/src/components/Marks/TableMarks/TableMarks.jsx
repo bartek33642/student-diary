@@ -11,6 +11,7 @@ import { isCertificateWithHonors } from "../../../functionality/isCertificateWit
 
 export const TableMarks = () => {
   const [grades, setGrades] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [finalGrades, setFinalGrades] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -36,6 +37,7 @@ export const TableMarks = () => {
 
         // Ustaw dane w stanie
         setGrades(mergedData);
+        setSubjects(subjects);
 
         // Pobierz oceny końcowe dla każdego przedmiotu
         const finalGradesEndpoint = 'http://localhost:3001/finalGrades/';
@@ -67,18 +69,23 @@ export const TableMarks = () => {
     fetchData();
   }, []);
 
-  // Funkcja grupująca oceny według przedmiotu
-  const groupGradesBySubject = (grades) => {
-    const groupedGrades = {};
-    grades.forEach((grade) => {
-      if (!groupedGrades[grade.subjectName]) {
-        groupedGrades[grade.subjectName] = [grade.value];
-      } else {
-        groupedGrades[grade.subjectName].push(grade.value);
-      }
-    });
-    return groupedGrades;
-  };
+// Funkcja grupująca oceny według przedmiotu
+const groupGradesBySubject = (grades) => {
+  const groupedGrades = {};
+
+  // Przypisz przedmioty bez ocen jako puste tablice
+  subjects.forEach((subject) => {
+    groupedGrades[subject.name] = [];
+  });
+  
+  grades.forEach((grade) => {
+    groupedGrades[grade.subjectName].push(grade.value);
+  });
+
+  console.log('groupedGrades:', groupedGrades);
+
+  return groupedGrades;
+};
 
   // console.log('grades:', grades);
   // console.log('finalGrades:', finalGrades);

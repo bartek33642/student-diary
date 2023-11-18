@@ -1,29 +1,11 @@
-// Marks.jsx
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./MarksStyle.css";
 import { TableMarks } from "./TableMarks/TableMarks";
 import { RiMenuFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { CalculatorOfAverage } from "./CalculatorOfAverage/CalculatorOfAverage";
-import { fullYearAverage } from "../../functionality/fullYearAverage";
 
 export const Marks = () => {
-  const [finalGrades, setFinalGrades] = useState({});
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const finalGradesEndpoint = 'http://localhost:3001/finalGrades/all';
-        const response = await fetch(finalGradesEndpoint);
-        const data = await response.json();
-        setFinalGrades(data);
-      } catch (error) {
-        console.error('Błąd podczas pobierania danych:', error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="marks-container">
@@ -34,7 +16,7 @@ export const Marks = () => {
           </Link>
         </div>
         <div className="elements-marks-view">
-          <TableMarks finalGradesProp={finalGrades} />
+          <TableMarks />
         </div>
 
         <hr className="marks-hr" />

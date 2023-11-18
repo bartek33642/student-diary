@@ -1,12 +1,13 @@
 .table-of-grades{
-    background-color: gray;
+    background-color: rgb(196, 196, 196);
     text-align: center;
-    border: solid black 1px;
+    border: solid rgb(167, 167, 167) 1px;
     min-height: 90px;
+    border-collapse: collapse;
     margin: auto;
 }
 .marks-table-th, .marks-table-td{
-    border: solid black 1px;
+    border: solid rgb(99, 98, 98) 1px;
     min-width: 120px;
 }
 

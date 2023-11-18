@@ -7,3 +7,16 @@
     color: #fff;
     text-align: center;
 }
+
+.information-about-app {
+    margin-top: 40px;
+    color: white;
+    font-size: 20pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.information-about-app p {
+    line-height: 3em;
+}
