@@ -1,6 +1,16 @@
 import gradesDAO from '../DAO/gradesDAO';
 
 function create(context) {
+
+  async function getAllGrades() {
+    try {
+      return await gradesDAO.getAllGrades({});
+    } catch (error) {
+      throw new Error(`Błąd pobierania ocen: ${error.message}`);
+    }
+  }
+  
+
   async function createOrUpdateGrade(data) {
     try {
       return await gradesDAO.createOrUpdateGrade(data);
@@ -29,6 +39,7 @@ function create(context) {
     createOrUpdateGrade: createOrUpdateGrade,
     getGradesBySubject: getGradesBySubject,
     deleteGrade: deleteGrade,
+    getAllGrades: getAllGrades,
   };
 }
 

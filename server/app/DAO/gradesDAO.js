@@ -46,19 +46,21 @@ async function createOrUpdateGrade(data) {
 async function getGradesBySubject(subjectId) {
   try {
     console.log('Checking if subject exists...');
-    const subject = await subjectsDAO.model.findOne({ _id: subjectId });
-    const subjectExists = subject !== null;
-    if (!subjectExists) {
-      throw new Error('Przedmiot o podanym subjectId nie istnieje.');
+
+    if (subjectId !== 'all' && !mongoose.isValidObjectId(subjectId)) {
+      throw new Error('Nieprawidłowy format subjectId.');
     }
 
+    const query = subjectId !== 'all' ? { _id: subjectId } : {}; // Dodaj warunek, aby zwrócić wszystkie oceny, gdy subjectId to 'all'
+    
     console.log('Fetching grades for subject...');
-    return GradeModel.find({ subjectId: subjectId });
+    return GradeModel.find(query);
   } catch (error) {
     console.error(`Error in getGradesBySubject: ${error.message}`);
     throw error;
   }
 }
+
 
 async function deleteGrade(gradeId) {
   try {
@@ -70,8 +72,19 @@ async function deleteGrade(gradeId) {
   }
 }
 
+async function getAllGrades(subjectId = {}) {
+  try {
+    const grades = await GradeModel.find({ subjectId }); // Możesz dostosować to zapytanie do swoich potrzeb
+    return grades;
+  } catch (error) {
+    throw new Error(`Błąd pobierania ocen: ${error.message}`);
+  }
+}
+
+
 export default {
   createOrUpdateGrade: createOrUpdateGrade,
   getGradesBySubject: getGradesBySubject,
-  deleteGrade: deleteGrade
+  deleteGrade: deleteGrade,
+  getAllGrades: getAllGrades
 };
