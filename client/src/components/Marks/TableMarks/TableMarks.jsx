@@ -8,6 +8,8 @@ import { median } from "../../../functionality/median";
 import { calculateExpectedGrade } from "../../../functionality/expectedGrade";
 import { fullYearAverage } from "../../../functionality/fullYearAverage";
 import { isCertificateWithHonors } from "../../../functionality/isCertificateWithHonors";
+import { Tooltip as TippyTooltip } from 'react-tippy';
+
 
 export const TableMarks = () => {
   const [grades, setGrades] = useState([]);
@@ -155,6 +157,58 @@ export const TableMarks = () => {
 
   console.log('grades:', grades);
 
+  const handleGradeClick = async (subjectId, gradeId) => {
+    const newWeight = window.prompt('Wprowadź wagę oceny:');
+    const newComment = window.prompt('Wprowadź komentarz:');
+  
+    console.log('New Weight:', newWeight);
+    console.log('New Comment:', newComment);
+    console.log('Subject ID:', subjectId);
+    console.log('Grade ID:', gradeId);
+  
+    if (newWeight !== null && newComment !== null) {
+      try {
+        const subject = subjects.find((sub) => sub.name === subjectId);
+  
+        if (!subject) {
+          console.error('Przedmiot o nazwie', subjectId, 'nie został znaleziony.');
+          return;
+        }
+        
+        const grade = grades.find((g) => g._id === gradeId);
+
+        if (!grade) {
+          console.error('Ocena o identyfikatorze', gradeId, 'nie została znaleziona.');
+          return;
+        }
+  
+        const addGradeEndpoint = `http://localhost:3001/grades`;
+        const response = await fetch(addGradeEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            value: parseFloat(grade.value),
+            weight: parseFloat(newWeight),
+            comment: newComment,
+            subjectId: subject._id,
+          }),
+        });
+  
+        if (response.ok) {
+          console.log('Nowa ocena została dodana.');
+          fetchData();
+        } else {
+          console.error('Błąd podczas dodawania nowej oceny:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Błąd podczas komunikacji z serwerem:', error.message);
+      }
+    }
+  };
+  
+
   if (isLoading || grades.length === 0 || Object.keys(finalGrades).length === 0) {
     return <div>Loading...</div>;
   }
@@ -174,20 +228,38 @@ export const TableMarks = () => {
           </tr>
         </thead>
         <tbody>
-          {grades && grades.length > 0 && Object.entries(groupGradesBySubject(grades)).map(([subject, values]) => {
+        {grades && grades.length > 0 && Object.entries(groupGradesBySubject(grades)).map(([subject, values]) => {
             return (
               <tr key={subject} className="marks-table-tr">
                 <td className="marks-table-td">{subject}</td>
-                <td className="marks-table-td">{values.join(', ')}
-                  <button onClick={() => handleAddGradeClick(subject)}>+</button>
-                </td>
+                {values.map((grade, index) => {
+                  const gradeInfo = grades.find(g => g.subjectName === subject && g.value === grade);
+                  return (
+                    <TippyTooltip
+                      key={index}
+                      title={`Waga: ${gradeInfo?.weight}, Ocena: ${grade}, Komentarz: ${gradeInfo?.comment}`}
+                      position="top"
+                      trigger="mouseenter"
+                    >
+                      <button
+                        className="grade-button"
+                        // onClick={() => handleGradeClick(subject, grade)}
+                      >
+                        {grade}
+                      </button>
+                    </TippyTooltip>
+                  );
+                })}
+                <button className="grade-button-2" onClick={() => handleAddGradeClick(subject)}>+</button>
+
+
                 <td className="marks-table-td">{countArithmeticAverage(values)}</td>
                 <td className="marks-table-td">{countWeightedAverage(values, grades, subject)}</td>
                 <td className="marks-table-td">{median(values)}</td>
                 <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subject))}</td>
                 <td className="marks-table-td">
                   {finalGrades[subject] && finalGrades[subject][0] && finalGrades[subject][0].value}
-                  <button onClick={() => handleAddFinalGradeClick(subject)}>+</button>
+                  <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subject)}>+</button>
                 </td>
               </tr>
             );
