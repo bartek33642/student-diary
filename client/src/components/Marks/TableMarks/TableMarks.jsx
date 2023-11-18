@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./TableMarksStyle.css";
 import { ajax } from 'rxjs/ajax';
+import { forkJoin } from 'rxjs';
 import { countArithmeticAverage } from '../../../functionality/countArithmeticAverage'
-import { catchError, forkJoin } from 'rxjs';
 import { countWeightedAverage } from "../../../functionality/countWeightedAverage";
+import { median } from "../../../functionality/median";
+import { calculateExpectedGrade } from "../../../functionality/expectedGrade";
+import { fullYearAverage } from "../../../functionality/fullYearAverage";
+import { isCertificateWithHonors } from "../../../functionality/isCertificateWithHonors";
 
 export const TableMarks = () => {
   const [grades, setGrades] = useState([]);
   const [finalGrades, setFinalGrades] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,8 +80,8 @@ export const TableMarks = () => {
     return groupedGrades;
   };
 
-  console.log('grades:', grades);
-  console.log('finalGrades:', finalGrades);
+  // console.log('grades:', grades);
+  // console.log('finalGrades:', finalGrades);
 
   // Dodaj warunek, aby sprawdzić, czy dane są dostępne przed renderowaniem
   if (isLoading || grades.length === 0 || Object.keys(finalGrades).length === 0) {
@@ -108,18 +113,25 @@ export const TableMarks = () => {
                 <td className="marks-table-td">{values.join(', ')}</td>
                 
                 <td className="marks-table-td">{countArithmeticAverage(values)}</td>
-                <td className="marks-table-td">{countWeightedAverage(values)}</td>
-                <td className="marks-table-td">{/* Wstaw odpowiednie pole dla mediany */}</td>
-                <td className="marks-table-td">{/* Wstaw odpowiednie pole dla przewidywanej oceny końcowej */}</td>
+                <td className="marks-table-td">{countWeightedAverage(values, grades, subject)}</td>
+                <td className="marks-table-td">{median(values)}</td>
+                <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subject))}</td>
                 <td className="marks-table-td">
                 {/* Wstaw odpowiednie pole dla oceny końcowej */}
                 {finalGrades[subject] && finalGrades[subject][0] && finalGrades[subject][0].value}
                 </td>
+                <td><p>Średnia z całego roku:  {fullYearAverage(finalGrades)}</p></td>
+                <td>Czy jest świadectwo z pakiem: {isCertificateWithHonors(fullYearAverage)}</td>
               </tr>
+              
+              
             );
+            
           })}
         </tbody>
       </table>
+
+      
     </div>
   );
 };

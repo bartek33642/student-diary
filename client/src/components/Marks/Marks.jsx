@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./MarksStyle.css"
 import { TableMarks } from "./TableMarks/TableMarks";
 import { RiMenuFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { CalculatorOfAverage } from "./CalculatorOfAverage/CalculatorOfAverage";
-
+import { fullYearAverage } from "../../functionality/fullYearAverage";
 
 export const Marks = () => {
+    const [finalGrades, setFinalGrades] = useState({}); // Ustawienie stanu dla ocen końcowych
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const finalGradesEndpoint = 'http://localhost:3001/finalGrades/all';
+            const response = await fetch(finalGradesEndpoint);
+            const data = await response.json();
+            setFinalGrades(data);
+          } catch (error) {
+            console.error('Błąd podczas pobierania danych:', error.message);
+          }
+        };
+    
+        fetchData();
+      }, []);
+
+
     return(
         <div className="marks-container">
             <div className="marks-elements">
@@ -20,7 +38,7 @@ export const Marks = () => {
                 
                 <div className="elements-marks-view">
                 <h2 className="marks-h2">
-                    Twoja średnia z całego roku :     <br />
+                    Twoja średnia z całego roku : {fullYearAverage(finalGrades)}<br />
                     Świadectwo z paskiem: 
                 </h2>
                 </div>

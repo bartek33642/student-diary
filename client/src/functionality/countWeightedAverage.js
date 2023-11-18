@@ -1,85 +1,35 @@
-// export const countWeightedAverage = (grades,value,weight) => {
-//     if (!grades || grades.length === 0 || value === 0 || weight === 0) {
-//       return 0;
-//     }
+export const countWeightedAverage = (values, grades, subject) => {
+  if (!grades || grades.length === 0) {
+    return 0;
+  }
 
-//     grades.forEach(function (){
-//         console.log("Wartość grade",grades);
-//         let value = grades.value;
-//         let weight = grades.weight;
-//         console.log("Wartość value w forEach",value);
-//         console.log("Wartość weight w forEach",weight);
-//     })
+  // Filtruj oceny dotyczące danego przedmiotu
+  const filteredGrades = grades.filter((grade) => grade.subjectName === subject);
 
-    
-//     console.log("Wartość weight: ", grades.weight);
-//     console.log("Wartość grades przed filtrowaniem:", grades);
+  // filteredGrades.forEach(function (grade) {
+  //   console.log("Wartość grade", grade);
+  //   let value = grade.value;
+  //   let weight = grade.weight;
+  //   console.log("Wartość value w forEach", value);
+  //   console.log("Wartość weight w forEach", weight);
+  // });
 
-  
-//     // Suma iloczynów wartości i wag ocen
-//     const sumWeighted = grades.reduce((acc, grade) => {
-//       return acc + grade.value * grade.weight;
-//     }, 0);
-  
-//     // Suma wag ocen
-//     const sumWeights = grades.reduce((acc, grade) => {
-//       return acc + grade.weight;
-//     }, 0);
-  
-//     // Oblicz średnią ważoną
-//     const weightedAverage = sumWeighted / sumWeights;
-  
-//     return Math.round(weightedAverage * 100) / 100;
-//   };
+  // console.log("Nazwa przedmiotu: ", subject);
+  // console.log("Wartości weight i value dla przedmiotu: ", filteredGrades);
 
-export const countWeightedAverage = (grades) => {
-    if (!grades || grades.length === 0) {
-      return 0;
-    }
-  
-    const validGrades = grades.filter(grade => typeof grade.value === 'number' && typeof grade.weight === 'number');
-  
-    if (validGrades.length === 0) {
-      console.warn("Brak poprawnych ocen. Zwracanie 0.");
-      return 0;
-    }
-  
-    const sumWeighted = validGrades.reduce((acc, grade) => acc + grade.value * grade.weight, 0);
-    const sumWeights = validGrades.reduce((acc, grade) => acc + grade.weight, 0);
-  
-    const weightedAverage = Math.round((sumWeighted / sumWeights) * 100) / 100;
-  
-    return weightedAverage;
-  };
-  
+  // Suma iloczynów wartości i wag ocen
+  const sumWeighted = filteredGrades.reduce((acc, grade) => {
+    return acc + grade.value * grade.weight;
+  }, 0);
 
+  // Suma wag ocen
+  const sumWeights = filteredGrades.reduce((acc, grade) => {
+    return acc + grade.weight;
+  }, 0);
 
+  // Oblicz średnią ważoną
+  const weightedAverage = sumWeighted / sumWeights;
 
+  return Math.round(weightedAverage * 100) / 100;
+};
 
-// export const countWeightedAverage = (values, weights) => {
-//     if (!values || values.length === 0 || !weights || weights.length === 0 || values.length !== weights.length) {
-//         return 0;
-//     }
-
-//     grades.forEach(function (grade){
-//         let value = grade.value;
-//         let weight = grade.weight;
-//         console.log("Wartość value w forEach",value);
-//         console.log("Wartość weight w forEach",weight);
-//     })
-
-//     // Suma iloczynów wartości i wag ocen
-//     const sumWeighted = values.reduce((acc, value, index) => {
-//         return acc + value * weights[index];
-//     }, 0);
-
-//     // Suma wag ocen
-//     const sumWeights = weights.reduce((acc, weight) => {
-//         return acc + weight;
-//     }, 0);
-
-//     // Oblicz średnią ważoną
-//     const weightedAverage = sumWeighted / sumWeights;
-
-//     return Math.round(weightedAverage * 100) / 100;
-// };
