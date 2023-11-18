@@ -10,7 +10,6 @@ import { fullYearAverage } from "../../../functionality/fullYearAverage";
 import { isCertificateWithHonors } from "../../../functionality/isCertificateWithHonors";
 import { Tooltip as TippyTooltip } from 'react-tippy';
 
-
 export const TableMarks = () => {
   const [grades, setGrades] = useState([]);
   const [subjects, setSubjects] = useState([]);
@@ -42,14 +41,16 @@ export const TableMarks = () => {
       );
 
       const finalGradesData = await forkJoin(finalGradesPromises).toPromise();
+    console.log('Final Grades Data:', finalGradesData);
 
-      const finalGradesMap = finalGradesData.reduce((acc, data, index) => {
-        const subjectName = mergedData[index].subjectName;
-        acc[subjectName] = data;
-        return acc;
-      }, {});
+    const finalGradesMap = finalGradesData.reduce((acc, data, index) => {
+      const subjectName = mergedData[index].subjectName;
+      acc[subjectName] = data;
+      return acc;
+    }, {});
+    console.log('Final Grades Map:', finalGradesMap);
 
-      setFinalGrades(finalGradesMap);
+    setFinalGrades(finalGradesMap);
 
       setIsLoading(false);
     } catch (error) {
@@ -66,11 +67,11 @@ export const TableMarks = () => {
     const groupedGrades = {};
 
     subjects.forEach((subject) => {
-      groupedGrades[subject.name] = [];
+      groupedGrades[subject._id] = [];
     });
 
     grades.forEach((grade) => {
-      groupedGrades[grade.subjectName].push(grade.value);
+      groupedGrades[grade.subjectId].push(grade._id);
     });
 
     console.log('groupedGrades:', groupedGrades);
@@ -90,10 +91,10 @@ export const TableMarks = () => {
 
     if (newGrade !== null && newWeight !== null && newComment !== null) {
       try {
-        const subject = subjects.find((sub) => sub.name === subjectId);
+        const subject = subjects.find((sub) => sub._id === subjectId);
 
         if (!subject) {
-          console.error('Przedmiot o nazwie', subjectId, 'nie został znaleziony.');
+          console.error('Przedmiot o id', subjectId, 'nie został znaleziony.');
           return;
         }
 
@@ -129,7 +130,7 @@ export const TableMarks = () => {
 
     if (newFinalGrade !== null) {
       try {
-        const subject = subjects.find((sub) => sub.name === subjectId);
+        const subject = subjects.find((sub) => sub._id === subjectId);
 
         const addFinalGradeEndpoint = `http://localhost:3001/finalGrades`;
         const response = await fetch(addFinalGradeEndpoint, {
@@ -155,33 +156,31 @@ export const TableMarks = () => {
     }
   };
 
-  console.log('grades:', grades);
-
   const handleGradeClick = async (subjectId, gradeId) => {
     const newWeight = window.prompt('Wprowadź wagę oceny:');
     const newComment = window.prompt('Wprowadź komentarz:');
-  
+
     console.log('New Weight:', newWeight);
     console.log('New Comment:', newComment);
     console.log('Subject ID:', subjectId);
     console.log('Grade ID:', gradeId);
-  
+
     if (newWeight !== null && newComment !== null) {
       try {
-        const subject = subjects.find((sub) => sub.name === subjectId);
-  
+        const subject = subjects.find((sub) => sub._id === subjectId);
+
         if (!subject) {
-          console.error('Przedmiot o nazwie', subjectId, 'nie został znaleziony.');
+          console.error('Przedmiot o id', subjectId, 'nie został znaleziony.');
           return;
         }
         
         const grade = grades.find((g) => g._id === gradeId);
 
         if (!grade) {
-          console.error('Ocena o identyfikatorze', gradeId, 'nie została znaleziona.');
+          console.error('Ocena o id', gradeId, 'nie została znaleziona.');
           return;
         }
-  
+
         const addGradeEndpoint = `http://localhost:3001/grades`;
         const response = await fetch(addGradeEndpoint, {
           method: 'POST',
@@ -195,7 +194,7 @@ export const TableMarks = () => {
             subjectId: subject._id,
           }),
         });
-  
+
         if (response.ok) {
           console.log('Nowa ocena została dodana.');
           fetchData();
@@ -207,7 +206,6 @@ export const TableMarks = () => {
       }
     }
   };
-  
 
   if (isLoading || grades.length === 0 || Object.keys(finalGrades).length === 0) {
     return <div>Loading...</div>;
@@ -228,42 +226,42 @@ export const TableMarks = () => {
           </tr>
         </thead>
         <tbody>
-        {grades && grades.length > 0 && Object.entries(groupGradesBySubject(grades)).map(([subject, values]) => {
-            return (
-              <tr key={subject} className="marks-table-tr">
-                <td className="marks-table-td">{subject}</td>
-                {values.map((grade, index) => {
-                  const gradeInfo = grades.find(g => g.subjectName === subject && g.value === grade);
-                  return (
+        {grades && grades.length > 0 && Object.entries(groupGradesBySubject(grades)).map(([subjectId, gradeIds]) => {
+    const subject = subjects.find(sub => sub._id === subjectId);
+    const values = gradeIds.map(gradeId => grades.find(g => g._id === gradeId).value);
+    return (
+        <tr key={subjectId} className="marks-table-tr">
+            <td className="marks-table-td">{subject ? subject.name : ''}</td>
+            {values.map((grade, index) => {
+                const gradeInfo = grades.find(g => g._id === gradeIds[index]);
+                return (
                     <TippyTooltip
-                      key={index}
-                      title={`Waga: ${gradeInfo?.weight}, Ocena: ${grade}, Komentarz: ${gradeInfo?.comment}`}
-                      position="top"
-                      trigger="mouseenter"
+                        key={index}
+                        title={`Waga: ${gradeInfo?.weight}, Ocena: ${grade}, Komentarz: ${gradeInfo?.comment}`}
+                        position="top"
+                        trigger="mouseenter"
                     >
-                      <button
-                        className="grade-button"
-                        // onClick={() => handleGradeClick(subject, grade)}
-                      >
-                        {grade}
-                      </button>
+                        <button
+                            className="grade-button"
+                            onClick={() => handleGradeClick(subjectId, gradeIds[index])}
+                        >
+                            {grade}
+                        </button>
                     </TippyTooltip>
-                  );
-                })}
-                <button className="grade-button-2" onClick={() => handleAddGradeClick(subject)}>+</button>
-
-
-                <td className="marks-table-td">{countArithmeticAverage(values)}</td>
-                <td className="marks-table-td">{countWeightedAverage(values, grades, subject)}</td>
-                <td className="marks-table-td">{median(values)}</td>
-                <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subject))}</td>
-                <td className="marks-table-td">
-                  {finalGrades[subject] && finalGrades[subject][0] && finalGrades[subject][0].value}
-                  <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subject)}>+</button>
-                </td>
-              </tr>
-            );
-          })}
+                );
+            })}
+            <button className="grade-button-2" onClick={() => handleAddGradeClick(subjectId)}>+</button>
+            <td className="marks-table-td">{countArithmeticAverage(values)}</td>
+            <td className="marks-table-td">{countWeightedAverage(values, grades, subjectId)}</td>
+            <td className="marks-table-td">{median(values)}</td>
+            <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subjectId))}</td>
+            <td className="marks-table-td">
+                {finalGrades[subjectId] && finalGrades[subjectId][0] && finalGrades[subjectId][0].value}
+                <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subjectId)}>+</button>
+            </td>
+        </tr>
+    );
+})}
         </tbody>
       </table>
 
