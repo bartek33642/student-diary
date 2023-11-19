@@ -12,6 +12,7 @@ import { Tooltip as TippyTooltip } from 'react-tippy';
 import { mode } from "../../../functionality/mode";
 import { gradesColors } from "../../../functionality/gradesColors";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { ViewSubject } from "../../ViewSubject/ViewSubject";
 
 export const TableMarks = () => {
 
@@ -409,6 +410,8 @@ export const TableMarks = () => {
 })}
         </tbody>
       </table>
+      {/* <ViewSubject grades={grades} /> */}
+
 
       <hr className="marks-hr table-marks-hr" />
 

@@ -6,10 +6,14 @@ import { HomePage } from './components/HomePage/HomePage';
 import { Marks } from './components/Marks/Marks';
 import { ViewSubject } from './components/ViewSubject/ViewSubject';
 import { Settings } from './components/Settings/Settings';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <div className="App">
+
+      <ToastContainer />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />}/>
@@ -21,6 +25,8 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+
+
     </div>
   );
 }

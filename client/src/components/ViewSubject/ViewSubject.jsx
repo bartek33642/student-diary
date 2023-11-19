@@ -3,7 +3,7 @@ import { RiMenuFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import "./ViewSubjectStyle.css";
 
-export const ViewSubject = () => {
+export const ViewSubject = ({ grades }) => {
   const [subjects, setSubjects] = useState([]);
 
   const fetchSubjects = async () => {
@@ -47,6 +47,31 @@ export const ViewSubject = () => {
       }
     }
   };
+  const handleDeleteSubject = async (subjectId) => {
+    const shouldDelete = window.confirm('Czy na pewno chcesz usunąć ten przedmiot? Upewnij się, że nie ma wpisanej żadnej oceny przypisanej do tego przedmiotu!');
+  
+    if (shouldDelete) {
+      try {
+        // 'grades' is not defined here
+        // You need to define or pass 'grades' as a prop to this component
+        const response = await fetch(`http://localhost:3001/subjects/${subjectId}`, {
+          method: 'DELETE',
+        });
+  
+        if (response.ok) {
+          console.log(`Przedmiot o ID ${subjectId} został usunięty.`);
+          fetchSubjects(); // Refresh the list of subjects after deletion
+        } else {
+          console.error('Błąd podczas usuwania przedmiotu:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Błąd podczas komunikacji z serwerem:', error.message);
+      }
+    }
+  };
+  
+  
+
 
   return (
     <div className="view-subject-container">
@@ -75,6 +100,8 @@ export const ViewSubject = () => {
                   <td className="table-subject-table-td">{subject.name}</td>
                   <td className="table-subject-table-td">
                     <button className="button-change-name-of-subject" onClick={() => handleRenameSubject(subject._id)}>Zmień nazwę</button>
+                    <button className="button-delete-subject" onClick={() => handleDeleteSubject(subject._id)}>Usuń</button>
+
                   </td>
                 </tr>
               ))}

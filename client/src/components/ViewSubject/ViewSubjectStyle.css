@@ -26,7 +26,7 @@
     border-collapse: collapse;
 }
 
-.button-change-name-of-subject {
+.button-change-name-of-subject, .button-delete-subject {
     background-color: #1C489D;
     border: none;
     color: white;
