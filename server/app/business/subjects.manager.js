@@ -18,11 +18,15 @@ function create(context) {
     }
   }
 
+
   async function createOrUpdate(data) {
     try {
-      return await subjectsDAO.createOrUpdate(data);
+      console.log('Data received in subjects.manager.createOrUpdate:', data);
+      const updatedSubject = await subjectsDAO.createOrUpdate(data);
+      return updatedSubject;
     } catch (error) {
-      throw new Error(`Błąd w trakcie tworzenia lub aktualizacji przedmiotu: ${error.message}`);
+      console.error('Błąd podczas aktualizacji przedmiotu:', error);
+      throw error;
     }
   }
 

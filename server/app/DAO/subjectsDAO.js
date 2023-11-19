@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const subjectsSchema = new mongoose.Schema({
   subjectId: { type: String, unique: true, default: () => uuidv4() },
-  name: { type: String, unique: true, required: true },
+  name: { type: String, required: true },
 }, {
   collection: 'subjects'
 });
@@ -31,12 +31,26 @@ async function get(id) {
 
 async function createOrUpdate(data) {
   try {
-    if (!data.subjectId) {
-      return await new SubjectModel(data).save();
+    console.log('Data received in subjectsDAO.createOrUpdate:', data);
+    console.log("Data._id wartosc:", data._id);
+
+    if (!data._id) {
+      throw new Error('Brak _id w danych.');
     } else {
-      return await SubjectModel.findOneAndUpdate({ subjectId: data.subjectId }, { name: data.name }, { new: true });
+      // Sprawdź, czy przedmiot o danym _id istnieje
+      const existingSubject = await SubjectModel.findById(data._id);
+
+      if (!existingSubject) {
+        throw new Error('Przedmiot o podanym _id nie istnieje.');
+      }
+
+      existingSubject.name = data.name;
+      const updatedSubject = await existingSubject.save();
+      console.log('Subject updated:', updatedSubject);
+      return updatedSubject;
     }
   } catch (error) {
+    console.error('Błąd w trakcie tworzenia lub aktualizacji przedmiotu:', error);
     throw new Error(`Błąd w trakcie tworzenia lub aktualizacji przedmiotu: ${error.message}`);
   }
 }

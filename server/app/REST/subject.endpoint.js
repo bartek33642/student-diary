@@ -73,32 +73,58 @@ export const subjectEndpoint = (router) => {
   });
 
   // Aktualizuj przedmiot o określonym ID
+  // router.put('/subjects/:id', [
+  //   body('name').isString().trim().notEmpty(),
+  // ], async (req, res) => {
+  //   const errors = validationResult(req);
+
+  //   if (!errors.isEmpty()) {
+  //     return res.status(400).json({ error: 'Nieprawidłowe dane wejściowe.', details: errors.array() });
+  //   }
+
+  //   const subjectId = req.params.id;
+
+  //   if (!isValidObjectId(subjectId)) {
+  //     return res.status(400).json({ error: 'Nieprawidłowy format ID przedmiotu.' });
+  //   }
+
+  //   const { name } = req.body;
+  //   const subjectData = { subjectId, name };
+
+  //   try {
+  //     // const updatedSubject = await business.subjectBusiness.createOrUpdateSubject(subjectData);
+  //     const updatedSubject = await business.getSubjectsManager().createOrUpdate(subjectData);
+  //     res.status(200).send(updatedSubject);
+  //     // res.json(updatedSubject);
+  //   } catch (error) {
+  //     console.error('Błąd podczas aktualizacji przedmiotu:', error);
+  //     res.status(500).json({ error: 'Wystąpił błąd podczas aktualizacji przedmiotu.' });
+  //   }
+  // });
+
   router.put('/subjects/:id', [
     body('name').isString().trim().notEmpty(),
   ], async (req, res) => {
     const errors = validationResult(req);
-
+  
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: 'Nieprawidłowe dane wejściowe.', details: errors.array() });
     }
-
+  
     const subjectId = req.params.id;
-
+  
     if (!isValidObjectId(subjectId)) {
       return res.status(400).json({ error: 'Nieprawidłowy format ID przedmiotu.' });
     }
-
+  
     const { name } = req.body;
-    const subjectData = { subjectId, name };
-
+  
     try {
-      // const updatedSubject = await business.subjectBusiness.createOrUpdateSubject(subjectData);
-      const updatedSubject = await business.getSubjectsManager().createOrUpdate(subjectData);
+      const updatedSubject = await business.getSubjectsManager().createOrUpdate({ _id: subjectId, name });
       res.status(200).send(updatedSubject);
-      // res.json(updatedSubject);
     } catch (error) {
-      console.error('Błąd podczas aktualizacji przedmiotu:', error);
-      res.status(500).json({ error: 'Wystąpił błąd podczas aktualizacji przedmiotu.' });
+      console.error('Błąd podczas aktualizacji nazwy przedmiotu:', error);
+      res.status(500).json({ error: 'Wystąpił błąd podczas aktualizacji nazwy przedmiotu.' });
     }
   });
 

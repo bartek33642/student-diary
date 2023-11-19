@@ -25,3 +25,16 @@
     border: 1px solid rgb(59, 59, 59);
     border-collapse: collapse;
 }
+
+.button-change-name-of-subject {
+    background-color: #1C489D;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
