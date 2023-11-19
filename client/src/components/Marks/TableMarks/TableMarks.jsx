@@ -273,6 +273,9 @@ export const TableMarks = () => {
     const finalGradesForSubject = getFinalGradesForSubject(finalGrades, subject?.name || '');
     // const finalGradesIds = handleDeleteFinalGradeClick( )
 
+    const isFinalGradeExist = finalGradesForSubject.length > 0;
+
+
     return (
         <tr key={subjectId} className="marks-table-tr">
             <td className="marks-table-td">{subject ? subject.name : ''}</td>
@@ -301,8 +304,18 @@ export const TableMarks = () => {
             <td className="marks-table-td">{median(values)}</td>
             <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subjectId))}</td>
             <td className="marks-table-td">
-            <button className="grade-button" onClick={() => handleDeleteFinalGradeClick(subjectId)}>{finalGradesForSubject.length > 0 ? finalGradesForSubject[0] : 'Brak oceny'}</button>
-  <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subjectId)}>+</button>
+            {isFinalGradeExist ? (
+                    <button className="grade-button" onClick={() => handleDeleteFinalGradeClick(subjectId)}>
+                        {finalGradesForSubject.length > 0 ? finalGradesForSubject[0] : 'Brak oceny'}
+                    </button>
+                ) : (
+                    <React.Fragment>
+                        <button className="grade-button" onClick={() => handleDeleteFinalGradeClick(subjectId)}>
+                            {finalGradesForSubject.length > 0 ? finalGradesForSubject[0] : 'Brak oceny'}
+                        </button>
+                        <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subjectId)}>+</button>
+                    </React.Fragment>
+                )}
 </td>
 
         </tr>
