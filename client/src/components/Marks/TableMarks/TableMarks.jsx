@@ -16,7 +16,7 @@ export const TableMarks = () => {
   const [subjects, setSubjects] = useState([]);
   const [finalGrades, setFinalGrades] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+  // const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -166,38 +166,36 @@ export const TableMarks = () => {
     }
   };
   
-  // const handleAddFinalGradeClick = async (subjectId) => {
-  //   const newFinalGrade = window.prompt('Wprowadź nową ocenę końcową:');
-  //   console.log('New Final Grade:', newFinalGrade);
+  const handleDeleteFinalGradeClick = async (subjectId) => {
+    const subjectName = subjects.find(sub => sub._id === subjectId)?.name || '';
+    const finalGradesForSubject = finalGrades[subjectName] || [];
+    
+    const finalGradeId = finalGradesForSubject.length > 0 ? finalGradesForSubject[0]._id : null;
+    console.log('Final Grade Id to delete:', finalGradeId);
+  
+    const shouldDelete = window.confirm('Czy na pewno chcesz usunąć ocenę końcową?');
+  
+    if (shouldDelete) {
+      try {
+        const deleteFinalGradeEndpoint = `http://localhost:3001/finalGrades/${finalGradeId}`;
+        const response = await fetch(deleteFinalGradeEndpoint, {
+          method: 'DELETE',
+        });
+  
+        if (response.ok) {
+          console.log('Ocena końcowa została usunięta.');
+          fetchData(); // ponowne pobranie danych po usunięciu
+        } else {
+          console.error('Błąd podczas usuwania oceny końcowej:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Błąd podczas komunikacji z serwerem:', error.message);
+      }
+    }
+  };
+  
 
-  //   if (newFinalGrade !== null) {
-  //     try {
-  //       const subject = subjects.find((sub) => sub._id === subjectId);
-
-  //       const addFinalGradeEndpoint = `http://localhost:3001/finalGrades`;
-  //       const response = await fetch(addFinalGradeEndpoint, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //         body: JSON.stringify({
-  //           value: parseFloat(newFinalGrade),
-  //           subjectId: subject._id,
-  //         }),
-  //       });
-
-  //       if (response.ok) {
-  //         console.log('Nowa ocena końcowa została dodana.');
-  //         fetchData();
-  //       } else {
-  //         console.error('Błąd podczas dodawania nowej oceny końcowej:', response.statusText);
-  //       }
-  //     } catch (error) {
-  //       console.error('Błąd podczas komunikacji z serwerem:', error.message);
-  //     }
-  //   }
-  // };
-
+  
   const handleGradeClick = async (subjectId, gradeId) => {
     const newWeight = window.prompt('Wprowadź wagę oceny:');
     const newComment = window.prompt('Wprowadź komentarz:');
@@ -273,6 +271,7 @@ export const TableMarks = () => {
     const subject = subjects.find(sub => sub._id === subjectId);
     const values = gradeIds.map(gradeId => grades.find(g => g._id === gradeId).value);
     const finalGradesForSubject = getFinalGradesForSubject(finalGrades, subject?.name || '');
+    // const finalGradesIds = handleDeleteFinalGradeClick( )
 
     return (
         <tr key={subjectId} className="marks-table-tr">
@@ -281,6 +280,7 @@ export const TableMarks = () => {
                 const gradeInfo = grades.find(g => g._id === gradeIds[index]);
                 return (
                     <TippyTooltip
+                    className="tippy-tooltip"
                         key={index}
                         title={`Waga: ${gradeInfo?.weight}, Ocena: ${grade}, Komentarz: ${gradeInfo?.comment}`}
                         position="top"
@@ -301,12 +301,9 @@ export const TableMarks = () => {
             <td className="marks-table-td">{median(values)}</td>
             <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subjectId))}</td>
             <td className="marks-table-td">
-            {finalGradesForSubject.length > 0 ? finalGradesForSubject[0] : 'Brak oceny'}
+            <button className="grade-button" onClick={() => handleDeleteFinalGradeClick(subjectId)}>{finalGradesForSubject.length > 0 ? finalGradesForSubject[0] : 'Brak oceny'}</button>
   <button className="grade-button-2" onClick={() => handleAddFinalGradeClick(subjectId)}>+</button>
 </td>
-
-
-
 
         </tr>
     );
