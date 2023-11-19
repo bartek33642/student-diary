@@ -11,6 +11,7 @@ import { isCertificateWithHonors } from "../../../functionality/isCertificateWit
 import { Tooltip as TippyTooltip } from 'react-tippy';
 import { mode } from "../../../functionality/mode";
 import { gradesColors } from "../../../functionality/gradesColors";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 
 export const TableMarks = () => {
 
@@ -18,6 +19,8 @@ export const TableMarks = () => {
   const [subjects, setSubjects] = useState([]);
   const [finalGrades, setFinalGrades] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedGrade, setSelectedGrade] = useState(null); // Dodaj nowy stan do przechowywania informacji o wybranej ocenie
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   // const [selectedSubjectId, setSelectedSubjectId] = useState(null);
 
   const fetchData = async () => {
@@ -320,7 +323,6 @@ export const TableMarks = () => {
   if (isLoading || grades.length === 0 || Object.keys(finalGrades).length === 0) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className="marks-table">
       <table className="table-of-grades">
@@ -358,28 +360,27 @@ export const TableMarks = () => {
                   <TippyTooltip
                   className="tippy-tooltip"
                   key={index}
-                  title={`Waga: ${gradeInfo?.weight}, Ocena: ${grade}, Komentarz: ${gradeInfo?.comment}`}
+                  title={`Ocena: ${grade}, Waga: ${gradeInfo?.weight}, Komentarz: ${gradeInfo?.comment}`}
                   position="top"
                   trigger="mouseenter"
                 >
-                  <div className="grade-button-container">
-                    <button
+                    {/* <button
                       className="grade-button"
                       style={{ backgroundColor: gradeStyle }}
                       onClick={() => handleGradeClick(subjectId, gradeIds[index])}
-                    >
-                      {grade}
-                    </button>
-                    <div className="grade-button-options">
-                      <button onClick={() => handleGradeEditClick(subjectId, gradeIds[index])}>
-                        Edytuj
+                    > */}
+                      <button
+                        className="grade-button"
+                        style={{ backgroundColor: gradeStyle }}
+                        onClick={() => {
+                          setSelectedGrade(gradeInfo);
+                          setIsDialogOpen(true);
+                        }}
+                      >
+                        {grade}
                       </button>
-                      <button onClick={() => handleGradeDeleteClick(subjectId, gradeIds[index])}>
-                        Usuń
-                      </button>
-                    </div>
-                  </div>
-                </TippyTooltip>
+                    </TippyTooltip>
+                  
                 );
             })}
             <button className="grade-button-2" onClick={() => handleAddGradeClick(subjectId)}>+</button>
@@ -418,6 +419,20 @@ export const TableMarks = () => {
           Świadectwo z paskiem: {isCertificateWithHonors(fullYearAverage(finalGrades))}
         </h2>
       </div>
+      <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+        <DialogTitle>Co chcesz zrobić?</DialogTitle>
+        <DialogContent>
+          <Button id="button-in-modal-window-table-marks" onClick={() => handleGradeEditClick(selectedGrade.subjectId, selectedGrade._id)}>
+            Edytuj ocenę
+          </Button>
+          <Button id="button-in-modal-window-table-marks" onClick={() => handleGradeDeleteClick(selectedGrade.subjectId, selectedGrade._id)}>
+            Usuń ocenę
+          </Button>
+          <Button id="button-in-modal-window-table-marks" onClick={() => setIsDialogOpen(false)}>
+            Anuluj
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

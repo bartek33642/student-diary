@@ -1,52 +1,58 @@
 .table-of-grades{
-    background-color: rgb(196, 196, 196);
-    text-align: center;
-    border: solid rgb(167, 167, 167) 1px;
-    min-height: 90px;
-    border-collapse: collapse;
-    margin: auto;
+  background-color: rgb(196, 196, 196);
+  text-align: center;
+  border: solid rgb(167, 167, 167) 1px;
+  min-height: 90px;
+  border-collapse: collapse;
+  margin: auto;
 }
 .marks-table-th, .marks-table-td{
-    border: solid rgb(99, 98, 98) 1px;
-    min-width: 120px;
+  border: solid rgb(99, 98, 98) 1px;
+  min-width: 120px;
 }
 
 .table-marks-hr {
-    margin-top: 50px;
+  margin-top: 50px;
 }
 .grade-button {
-    /* Twoje style przycisku "+" tutaj */
-    background-color: #4caf50;
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
+  /* Twoje style przycisku "+" tutaj */
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
 
-  .grade-button-2 {
-    /* Twoje style przycisku "+" tutaj */
-    background-color: #859c86;
-    border: none;
-    color: rgb(0, 0, 0);
-    padding: 10px 15px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
+.grade-button-2 {
+  /* Twoje style przycisku "+" tutaj */
+  background-color: #859c86;
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+#button-in-modal-window-table-marks {
+  background-color: #1C489D;
+  margin: 2px;
+  color: white;
+}
 
 
 
 @media (max-width: 915px) {
-    .marks-table-tr {
-        display: flex;
-        flex-direction: column;
-    }
+  .marks-table-tr {
+      display: flex;
+      flex-direction: column;
   }
+}

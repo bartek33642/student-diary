@@ -36,6 +36,6 @@ export const fullYearAverage = (finalGrades) => {
   
     console.log("Average: ", average);
   
-    return Math.round(average * 100) / 100;
+    return average.toFixed(2);
   };
   

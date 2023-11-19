@@ -18,8 +18,8 @@ export const Settings = () => {
         <div className="information-about-app">
             <h5>
                 <p>Aplikacja ta jest projektem zrealizowanym w ramach przedmiotu Testowanie i jakość oprogramowania.</p>
-                <p>Jest to dzienniczek elektroniczny dla uczniów.</p>
-                <p>Umożliwia dodawanie przedmiotów, ocen oraz sprawdzanie średnich dla ucznia.</p>
+                <p>Jest to dzienniczek elektroniczny dla ucznia.</p>
+                <p>Umożliwia dodawanie przedmiotów, ocen oraz sprawdzanie średnich.</p>
                 <p>Wersja aplikacji: 1.0</p>
             </h5>
             </div>
