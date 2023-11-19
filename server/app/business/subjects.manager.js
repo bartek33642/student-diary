@@ -18,6 +18,13 @@ function create(context) {
     }
   }
 
+  async function createSubject(data) {
+    try {
+      return await subjectsDAO.createSubject(data);
+    } catch (error) {
+      throw new Error(`Błąd w trakcie tworzenia lub aktualizacji przedmiotu: ${error.message}`);
+    }
+  }
 
   async function createOrUpdate(data) {
     try {
@@ -42,6 +49,7 @@ function create(context) {
     query: query,
     get: get,
     createOrUpdate: createOrUpdate,
+    createSubject: createSubject,
     deleteSubject: deleteSubject,
   };
 }

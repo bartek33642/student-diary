@@ -193,6 +193,69 @@ export const TableMarks = () => {
       }
     }
   };
+
+  const handleGradeEditClick = async (subjectId, gradeId) => {
+    const newValue = window.prompt('Wprowadź nową ocenę:');
+    const newWeight = window.prompt('Wprowadź nową wagę oceny:');
+    const newComment = window.prompt('Wprowadź nowy komentarz:');
+  
+    if (newWeight !== null && newComment !== null && newValue !== null) {
+      try {
+        const subject = subjects.find((sub) => sub._id === subjectId);
+        const grade = grades.find((g) => g._id === gradeId);
+  
+        if (!subject || !grade) {
+          console.error('Nie znaleziono przedmiotu lub oceny.');
+          return;
+        }
+  
+        const updateGradeEndpoint = `http://localhost:3001/grades/${gradeId}`;
+        const response = await fetch(updateGradeEndpoint, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            value: parseFloat(newValue),
+            weight: parseFloat(newWeight),
+            comment: newComment,
+            subjectId: subject._id,
+          }),
+        });
+  
+        if (response.ok) {
+          console.log('Ocena zaktualizowana pomyślnie.');
+          fetchData();
+        } else {
+          console.error('Błąd podczas aktualizacji oceny:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Błąd podczas komunikacji z serwerem:', error.message);
+      }
+    }
+  };
+  
+  const handleGradeDeleteClick = async (subjectId, gradeId) => {
+    const shouldDelete = window.confirm('Czy na pewno chcesz usunąć tę ocenę?');
+  
+    if (shouldDelete) {
+      try {
+        const deleteGradeEndpoint = `http://localhost:3001/grades/${gradeId}`;
+        const response = await fetch(deleteGradeEndpoint, {
+          method: 'DELETE',
+        });
+  
+        if (response.ok) {
+          console.log('Ocena usunięta pomyślnie.');
+          fetchData();
+        } else {
+          console.error('Błąd podczas usuwania oceny:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Błąd podczas komunikacji z serwerem:', error.message);
+      }
+    }
+  };
   
 
   
@@ -282,20 +345,30 @@ export const TableMarks = () => {
             {values.map((grade, index) => {
                 const gradeInfo = grades.find(g => g._id === gradeIds[index]);
                 return (
-                    <TippyTooltip
-                    className="tippy-tooltip"
-                        key={index}
-                        title={`Waga: ${gradeInfo?.weight}, Ocena: ${grade}, Komentarz: ${gradeInfo?.comment}`}
-                        position="top"
-                        trigger="mouseenter"
+                  <TippyTooltip
+                  className="tippy-tooltip"
+                  key={index}
+                  title={`Waga: ${gradeInfo?.weight}, Ocena: ${grade}, Komentarz: ${gradeInfo?.comment}`}
+                  position="top"
+                  trigger="mouseenter"
+                >
+                  <div className="grade-button-container">
+                    <button
+                      className="grade-button"
+                      onClick={() => handleGradeClick(subjectId, gradeIds[index])}
                     >
-                        <button
-                            className="grade-button"
-                            onClick={() => handleGradeClick(subjectId, gradeIds[index])}
-                        >
-                            {grade}
-                        </button>
-                    </TippyTooltip>
+                      {grade}
+                    </button>
+                    <div className="grade-button-options">
+                      <button onClick={() => handleGradeEditClick(subjectId, gradeIds[index])}>
+                        Edytuj
+                      </button>
+                      <button onClick={() => handleGradeDeleteClick(subjectId, gradeIds[index])}>
+                        Usuń
+                      </button>
+                    </div>
+                  </div>
+                </TippyTooltip>
                 );
             })}
             <button className="grade-button-2" onClick={() => handleAddGradeClick(subjectId)}>+</button>

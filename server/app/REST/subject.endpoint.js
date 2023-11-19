@@ -64,7 +64,7 @@ export const subjectEndpoint = (router) => {
 
     try {
       // const createdSubject = await business.subjectBusiness.createOrUpdateSubject(subjectData);
-      const createdSubject = await business.getSubjectsManager().createOrUpdate(subjectData);
+      const createdSubject = await business.getSubjectsManager().createSubject(subjectData);
       res.status(201).send(createdSubject);
     } catch (error) {
       console.error('Błąd podczas dodawania przedmiotu:', error);

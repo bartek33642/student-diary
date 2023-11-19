@@ -29,6 +29,18 @@ async function get(id) {
   }
 }
 
+async function createSubject(data) {
+  try {
+    if (!data.subjectId) {
+      return await new SubjectModel(data).save();
+    } else {
+      return await SubjectModel.findOneAndUpdate({ subjectId: data.subjectId }, { name: data.name }, { new: true });
+    }
+  } catch (error) {
+    throw new Error(`Błąd w trakcie tworzenia lub aktualizacji przedmiotu: ${error.message}`);
+  }
+}
+
 async function createOrUpdate(data) {
   try {
     console.log('Data received in subjectsDAO.createOrUpdate:', data);
@@ -79,6 +91,7 @@ export default {
   query: query,
   get: get,
   createOrUpdate: createOrUpdate,
+  createSubject: createSubject,
   model: SubjectModel,
   deleteSubject: deleteSubject,
 };

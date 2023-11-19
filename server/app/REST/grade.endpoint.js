@@ -18,7 +18,7 @@ router.get('/grades/:subjectId', async (req, res) => {
 
 router.get('/grades/all', async (req, res) => {
   try {
-    const grades = await gradesManager.create().getAllGrades(); // poprawne
+    const grades = await gradesManager.create().getAllGrades();
     res.json(grades);
   } catch (error) {
     res.status(500).json({ error: error.message });
