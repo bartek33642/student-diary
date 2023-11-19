@@ -9,6 +9,8 @@ import { calculateExpectedGrade } from "../../../functionality/expectedGrade";
 import { fullYearAverage } from "../../../functionality/fullYearAverage";
 import { isCertificateWithHonors } from "../../../functionality/isCertificateWithHonors";
 import { Tooltip as TippyTooltip } from 'react-tippy';
+import { mode } from "../../../functionality/mode";
+import { gradesColors } from "../../../functionality/gradesColors";
 
 export const TableMarks = () => {
 
@@ -310,6 +312,11 @@ export const TableMarks = () => {
     }
   };
 
+  const handleModeClick = (subjectId, grades) => {
+    const gradesMode = mode(grades);
+    alert(`Dominanta ocen dla przedmiotu: ${subjectId} to ${gradesMode}`);
+  };
+
   if (isLoading || grades.length === 0 || Object.keys(finalGrades).length === 0) {
     return <div>Loading...</div>;
   }
@@ -324,6 +331,7 @@ export const TableMarks = () => {
             <th className="marks-table-th">Średnia <br />arytmetyczna</th>
             <th className="marks-table-th">Średnia <br />ważona</th>
             <th className="marks-table-th">Mediana</th>
+            <th className="marks-table-th">Dominanta</th>
             <th className="marks-table-th">Przewidywana ocena <br />końcowa</th>
             <th className="marks-table-th">Ocena <br /> końcowa</th>
           </tr>
@@ -344,6 +352,8 @@ export const TableMarks = () => {
             <td className="marks-table-td">{subject ? subject.name : ''}</td>
             {values.map((grade, index) => {
                 const gradeInfo = grades.find(g => g._id === gradeIds[index]);
+                const gradeStyle = gradesColors(grade);
+
                 return (
                   <TippyTooltip
                   className="tippy-tooltip"
@@ -355,6 +365,7 @@ export const TableMarks = () => {
                   <div className="grade-button-container">
                     <button
                       className="grade-button"
+                      style={{ backgroundColor: gradeStyle }}
                       onClick={() => handleGradeClick(subjectId, gradeIds[index])}
                     >
                       {grade}
@@ -375,6 +386,7 @@ export const TableMarks = () => {
             <td className="marks-table-td">{countArithmeticAverage(values)}</td>
             <td className="marks-table-td">{countWeightedAverage(values, grades, subjectId)}</td>
             <td className="marks-table-td">{median(values)}</td>
+            <td className="marks-table-td">{mode(values).join(', ')}</td>
             <td className="marks-table-td">{calculateExpectedGrade(countWeightedAverage(values, grades, subjectId))}</td>
             <td className="marks-table-td">
             {isFinalGradeExist ? (
