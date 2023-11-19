@@ -18,19 +18,40 @@ Go to the project directory - Przejdź do folderu z projektem
 ```bash
   cd student-diary
 ```
-
 Install dependencies - Zainstaluj zależności
 
+- Server-side - Po stronie serwera
+
 ```bash
+  cd server
+  npm install
+```
+
+- Client-side - Po stronie klietna
+
+```bash
+  cd ..
+  cd client
   npm install
 ```
 
 Start the server - Uruchom serwer
 
+- Server-side - Po stronie serwera
+
 ```bash
-  npm run start
+  cd server
+  npm start
 ```
-    
+
+- Client-side - Po stronie klietna
+Run in the second terminal/cmd - Uruchom w drugim terminalu
+
+```bash
+  cd client
+  npm start
+``` 
+
 ## Authors - Autorzy
 
 - [@wiktor34306](https://www.github.com/wiktor34306)
