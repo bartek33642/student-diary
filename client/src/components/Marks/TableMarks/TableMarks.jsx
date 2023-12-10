@@ -4,12 +4,12 @@ import { ajax } from 'rxjs/ajax';
 import { forkJoin } from 'rxjs';
 import { countArithmeticAverage } from '../../../functionality/countArithmeticAverage'
 import { countWeightedAverage } from "../../../functionality/countWeightedAverage";
-import { median } from "../../../functionality/median";
+import median  from "../../../functionality/median";
 import { calculateExpectedGrade } from "../../../functionality/expectedGrade";
 import { fullYearAverage } from "../../../functionality/fullYearAverage";
 import { isCertificateWithHonors } from "../../../functionality/isCertificateWithHonors";
 import { Tooltip as TippyTooltip } from 'react-tippy';
-import { mode } from "../../../functionality/mode";
+import mode from "../../../functionality/mode";
 import { gradesColors } from "../../../functionality/gradesColors";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { ViewSubject } from "../../ViewSubject/ViewSubject";
