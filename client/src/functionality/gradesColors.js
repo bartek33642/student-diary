@@ -1,6 +1,10 @@
-export const gradesColors = (grade) => {
+const gradesColors = (grade) => {
     const gradeValue = parseFloat(grade);
-    console.log('Received grade:', grade);
+    // console.log('Received grade:', grade);
+
+    if (grade === null) {
+      throw new Error('Input is null');
+  }
 
     if (gradeValue === 6) {
       return 'green';
@@ -20,3 +24,4 @@ export const gradesColors = (grade) => {
       return 'darkgray'; // Dodaj odpowiedni kolor dla przypadku domyślnego
     }
 };
+module.exports = gradesColors;

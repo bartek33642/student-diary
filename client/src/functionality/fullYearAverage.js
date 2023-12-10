@@ -15,10 +15,12 @@
 //     return Math.round(average * 100) / 100;
 //   };
 
-export const fullYearAverage = (finalGrades) => {
+const fullYearAverage = (finalGrades) => {
     if (!finalGrades || Object.keys(finalGrades).length === 0) {
       return 0;
     }
+
+
   
     const gradesValues = Object.values(finalGrades).flatMap((grades) => {
       if (grades[0] && grades[0].value) {
@@ -26,6 +28,10 @@ export const fullYearAverage = (finalGrades) => {
       }
       return [];
     });
+
+    if (!gradesValues.every(value => typeof value === 'number' && value !== null)) {
+      throw new Error('Invalid input: Array contains non-numeric values');
+    }
   
     if (gradesValues.length === 0) {
       return 0;
@@ -34,8 +40,10 @@ export const fullYearAverage = (finalGrades) => {
     const sum = gradesValues.reduce((acc, value) => acc + value, 0);
     const average = sum / gradesValues.length;
   
-    console.log("Average: ", average);
+    // console.log("Average: ", average);
   
     return average.toFixed(2);
   };
-  
+
+module.exports = fullYearAverage;
+

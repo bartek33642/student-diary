@@ -1,4 +1,9 @@
-export const calculateExpectedGrade = (weightedAverage) => {
+const calculateExpectedGrade = (weightedAverage) => {
+
+  if (weightedAverage === null || weightedAverage < 0) {
+    throw new Error('Input is wrong');
+  }
+
     if (weightedAverage >= 1.0 && weightedAverage <= 1.50) {
       return 1;
     } else if (weightedAverage > 1.50 && weightedAverage <= 2.50) {
@@ -18,4 +23,4 @@ export const calculateExpectedGrade = (weightedAverage) => {
       return 0; 
     }
   };
-  
+module.exports = calculateExpectedGrade;
