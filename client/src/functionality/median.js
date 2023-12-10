@@ -1,8 +1,12 @@
-export const median = (grades) => {
+const median = (grades) => {
     if (!grades || grades.length === 0) {
       return 0;
     }
   
+    if (!grades.every(value => typeof value === 'number' && value !== null)) {
+      throw new Error('Invalid input: Array contains non-numeric values');
+    }
+
     // sortowanie ocen rosnąco
     const sortedGrades = [...grades].sort((a, b) => a - b);
   
@@ -17,4 +21,6 @@ export const median = (grades) => {
       return sortedGrades[Math.floor(length / 2)];
     }
   };
+
+  module.exports = median;
   

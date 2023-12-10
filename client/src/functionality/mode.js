@@ -1,6 +1,10 @@
-export const mode = (grades) => {
+const mode = (grades) => {
     if (!grades || grades.length === 0) {
       return [];
+    }
+    
+    if (!grades.every(value => typeof value === 'number' && value !== null)) {
+      throw new Error('Invalid input: Array contains non-numeric values');
     }
   
     const uniqueGrades = new Set(grades);
@@ -21,10 +25,12 @@ export const mode = (grades) => {
       }
     });
   
-    const modeGrades = Object.keys(counts).filter(
-      (grade) => counts[grade] === maxCount
-    );
-  
-    return modeGrades;
-  };
+    const modeGrades = Object.keys(counts)
+    .filter((grade) => counts[grade] === maxCount)
+    .map(Number); // Zamień stringi na liczby
+
+  return modeGrades;
+};
+
+  module.exports = mode;
   
