@@ -13,6 +13,7 @@ import mode from "../../../functionality/mode";
 import gradesColors from "../../../functionality/gradesColors";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { ViewSubject } from "../../ViewSubject/ViewSubject";
+import uppercaseFirstLetterOfSubject from "../../../functionality/uppercaseFirstLetterOfSubject";
 
 export const TableMarks = () => {
 
@@ -352,7 +353,7 @@ export const TableMarks = () => {
 
     return (
         <tr key={subjectId} className="marks-table-tr">
-            <td className="marks-table-td">{subject ? subject.name : ''}</td>
+            <td className="marks-table-td">{subject ? uppercaseFirstLetterOfSubject(subject.name) : ''}</td>
             {values.map((grade, index) => {
                 const gradeInfo = grades.find(g => g._id === gradeIds[index]);
                 const gradeStyle = gradesColors(grade);
