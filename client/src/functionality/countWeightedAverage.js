@@ -34,19 +34,36 @@
 // };
 
 
-export const countWeightedAverage = (values, allGrades, subjectId) => {
+const countWeightedAverage = (values, allGrades, subjectId) => {
   const subjectGrades = allGrades.filter((grade) => grade.subjectId === subjectId);
+
+  if (subjectGrades.length === 0 || subjectGrades.length !== values.length) {
+    throw new Error('Input value is wrong');
+  }
+
+  const invalidValues = values.some(value => value === null || value < 0 || value > 6);
+  if (invalidValues) {
+    throw new Error('Input value is wrong');
+  }
+
+  const invalidWeights = subjectGrades.some(grade => grade.weight === null || grade.weight < 0);
+  if (invalidWeights) {
+    throw new Error('Weight value is wrong');
+  }
+
+  const totalWeight = subjectGrades.reduce((sum, grade) => sum + grade.weight, 0);
+
+  if (totalWeight === 0) {
+    throw new Error('Division by zero');
+  }
 
   const weightedSum = values.reduce((sum, value, index) => {
     const weight = subjectGrades[index].weight;
     return sum + value * weight;
   }, 0);
 
-  const totalWeight = subjectGrades.reduce((sum, grade) => sum + grade.weight, 0);
-
-  if (totalWeight === 0) return 0; // Zabezpieczenie przed dzieleniem przez zero.
-
   const average = weightedSum / totalWeight;
   return Math.round(average * 100) / 100;
 };
 
+module.exports = countWeightedAverage;

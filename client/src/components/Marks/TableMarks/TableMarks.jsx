@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./TableMarksStyle.css";
 import { ajax } from 'rxjs/ajax';
 import { forkJoin } from 'rxjs';
-import { countArithmeticAverage } from '../../../functionality/countArithmeticAverage'
-import { countWeightedAverage } from "../../../functionality/countWeightedAverage";
+import countArithmeticAverage from '../../../functionality/countArithmeticAverage'
+import countWeightedAverage from "../../../functionality/countWeightedAverage";
 import median  from "../../../functionality/median";
 import calculateExpectedGrade from "../../../functionality/expectedGrade";
 import fullYearAverage from "../../../functionality/fullYearAverage";

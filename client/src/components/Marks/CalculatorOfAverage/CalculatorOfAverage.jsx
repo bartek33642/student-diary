@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./CalculatorOfAverageStyle.css";
-import { calculateWeightedAverage } from "../../../functionality/countAverageCalculator";
+import calculateWeightedAverage from "../../../functionality/countAverageCalculator";
 
 export const CalculatorOfAverage = () => {
     const [rows, setRows] = useState([{ value: "", weight: "" }]);

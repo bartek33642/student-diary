@@ -1,25 +1,27 @@
-export const calculateWeightedAverage = (rows) => {
+const calculateWeightedAverage = (rows) => {
     const totalWeightedValue = rows.reduce((acc, row) => {
         const value = parseFloat(row.value);
         const weight = parseFloat(row.weight);
-        
-        if ((value < 0 && weight < 0) || (value < 0 || weight < 0)) {
-            alert("Podałeś niedozwolone wartości. Wartości nie mogą być ujemne.");
-            return NaN;
+
+        if (isNaN(value) || isNaN(weight)) {
+            throw new Error('Nieprawidłowe dane wejściowe. Wartość i waga muszą być liczbami.');
         }
 
-        if(!isNaN(value) && !isNaN(weight)) {
-            return acc + value * weight;
+        if (value < 0 || weight < 0) {
+            throw new Error('Nieprawidłowe dane wejściowe. Wartość i waga nie mogą być ujemne.');
         }
-        return acc;
+
+        return acc + value * weight;
     }, 0);
 
     const totalWeight = rows.reduce((acc, row) => {
         const weight = parseFloat(row.weight);
-        if (!isNaN(weight)) {
-            return acc + weight;
+
+        if (isNaN(weight)) {
+            throw new Error('Nieprawidłowe dane wejściowe. Waga musi być liczbą.');
         }
-        return acc;
+
+        return acc + weight;
     }, 0);
 
     if (totalWeight === 0) {
@@ -28,3 +30,5 @@ export const calculateWeightedAverage = (rows) => {
 
     return totalWeightedValue / totalWeight;
 };
+
+module.exports = calculateWeightedAverage;
