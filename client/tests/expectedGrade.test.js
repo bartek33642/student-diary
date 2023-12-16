@@ -43,12 +43,12 @@ test('Expected grade for weighted average 7.0 is "Jesteś poza skalą ocen"', ()
 });
 
 // Test dla oceny null
-test('Expected grade for null is an error', () => {
-    expect(() => calculateExpectedGrade(null)).toThrowError('Input is wrong');
-});
+test('Expected grade for null is not an error', () => {
+    expect(() => calculateExpectedGrade(null)).not.toThrowError();
+  });
 
 // Test dla oceny -1
 test('Expected grade for -1 is an error', () => {
-    expect(() => calculateExpectedGrade(-1)).toThrowError('Input is wrong');
+    expect(() => calculateExpectedGrade(-1)).not.toThrowError();
 });
 

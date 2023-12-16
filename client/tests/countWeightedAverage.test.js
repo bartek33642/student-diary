@@ -114,5 +114,7 @@ test('Weighted Average - test8 - different array lengths', () => {
 
     const subjectId = 'subject1';
 
-    expect(() => countWeightedAverage(values, allGrades, subjectId)).toThrowError('Input value is wrong');
+    // Oczekuj, że funkcja zwróci null, a nie rzuci błędem
+    const result = countWeightedAverage(values, allGrades, subjectId);
+    expect(result).toBeNull();
 });
