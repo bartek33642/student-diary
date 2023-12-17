@@ -122,6 +122,7 @@ it('should get grade by id', async () => {
   const gradesGetById = await supertest(app)
   .get(`/grades/${gradesData.subjectId}`)
   expect(gradesGetById.status).toBe(200);
+
 });
 
 
