@@ -97,7 +97,8 @@ import supertest from "supertest";
 import app from "../app/app";
 
 const gradesData = {
-  subjectId: '657dc493bb5e88bd6d442c7a'
+  subjectId: '657dc493bb5e88bd6d442c7a',
+  gradeId: '657f4c5be74b02aa48c5cf65'
 }
 beforeAll(async () => {
   await mongoose.connect(config.databaseUrl, {
@@ -123,6 +124,41 @@ it('should get grade by id', async () => {
   .get(`/grades/${gradesData.subjectId}`)
   expect(gradesGetById.status).toBe(200);
 
+});
+
+describe("POST /grades", () => {
+  it("should add new grade", async () => {
+    const dataToSave = {
+      value: "3",
+      weight: "2",
+      comment: 'kartkowka - poprawa druga',
+      subjectId: gradesData.subjectId,
+    };
+
+    const response = await supertest(app)
+      .post("/grades")
+      .send(dataToSave)
+    expect(response.statusCode).toBe(200);
+    expect(response.body.name).toBe();
+  });
+});
+
+describe("PUT /grades/:gradeId", () => {
+  it("should add new grade", async () => {
+    const dataToSave = {
+      gradeId: gradesData.gradeId,
+      value: "3",
+      weight: "4",
+      comment: 'kartkowka - poprawa druga',
+      subjectId: gradesData.subjectId,
+    };
+
+    const response = await supertest(app)
+    .put("/grades/" + dataToSave.gradeId) 
+      .send(dataToSave)
+    expect(response.statusCode).toBe(200);
+    // expect(response.body.name).toBe();
+  });
 });
 
 

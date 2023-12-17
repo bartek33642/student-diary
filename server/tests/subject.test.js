@@ -34,4 +34,27 @@ describe('Subjects DAO', () => {
     .get(`/subjects/${subjectData.subjectId}`)
     expect(subjectGetById.statusCode).toBe(200);
   });
+
+
+  describe("POST /subjects", () => {
+    it("should add new subject", async () => {
+      const dataToSave = {
+        name: "Historia"
+      };
+    
+      let response = await supertest(app)
+        .post("/subjects")
+        .send(dataToSave)
+      expect(response.statusCode).toBe(201); // Sprawdź, czy kod statusu to 201
+      expect(response.body.name).toBe(dataToSave.name); // Sprawdź, czy nazwa zwróconego przedmiotu jest taka sama jak nazwa wysłanego przedmiotu
+  
+      // // Teraz spróbujmy dodać ten sam przedmiot ponownie
+      // response = await supertest(app)
+      //   .post("/subjects")
+      //   .send(dataToSave)
+      // expect(response.statusCode).toBe(400); // Powinniśmy otrzymać kod statusu 400, ponieważ przedmiot o tej nazwie już istnieje
+      // expect(response.body.error).toBe('Przedmiot o tej nazwie już istnieje.'); // Sprawdź, czy komunikat o błędzie jest poprawny
+    });
+  });
+  
 });
