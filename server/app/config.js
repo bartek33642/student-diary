@@ -2,7 +2,7 @@ const config = {
     port: process.env.PORT || 3001,
     // databaseUrl: process.env.MONGODB_URI || 'mongodb+srv://taw_project:kmwtwkmwtw@cluster0.wyb81xx.mongodb.net/?retryWrites=true&w=majority',
     databaseUrl: process.env.MONGODB_URI || 'mongodb+srv://vf81ahi8ad:CoTDHRDzc5qbQxA5@tijo.sccxqal.mongodb.net/?retryWrites=true&w=majority',
-    JwtSecret: process.env.JWT_SECRET || 'secret'
+    JwtSecret: process.env.JWT_SECRET || 'secret',
   };
   
   export default config;

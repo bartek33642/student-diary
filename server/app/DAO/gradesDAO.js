@@ -72,9 +72,10 @@ async function deleteGrade(gradeId) {
   }
 }
 
-async function getAllGrades(subjectId = {}) {
+async function getAllGrades(subjectId) {
   try {
-    const grades = await GradeModel.find({ subjectId }); // Możesz dostosować to zapytanie do swoich potrzeb
+    const query = subjectId !== 'all' ? { subjectId } : {}; 
+    const grades = await GradeModel.find(query);
     return grades;
   } catch (error) {
     throw new Error(`Błąd pobierania ocen: ${error.message}`);
