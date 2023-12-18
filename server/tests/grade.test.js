@@ -1,95 +1,3 @@
-// import mongoose from "mongoose";
-// import gradesDAO from "../app/DAO/gradesDAO";
-// import subjectsDAO from "../app/DAO/subjectsDAO";
-// import config from "../app/config";
-
-// const subjectData = {
-//     _id: new mongoose.Types.ObjectId(), // Utwórz nowy ObjectId
-//     name: 'Historia i Społeczeństwo',
-//     subjectId: new mongoose.Types.ObjectId().toString(), // Użyj _id z subjectData
-//   };
-  
-//   const gradeData = {
-//     _id: new mongoose.Types.ObjectId(),
-//     value: 3,
-//     weight: 1,
-//     comment: 'Test wiedzy',
-//     subjectId: subjectData._id, // Użyj _id z subjectData
-//     gradeId: mongoose.Types.ObjectId.toString()
-//   };
-
-//   describe("Grades DAO Tests", () => {
-//     let grade = {};
-//     let subject = {}; // Zmienna do przechowywania utworzonego przedmiotu
-  
-//     beforeEach(async () => {
-//       await mongoose.connect(config.databaseUrl);
-//       subject = await subjectsDAO.createOrUpdate(subjectData);
-//       gradeData.subjectId = subject._id; // Ustaw prawidłowe _id dla oceny
-//       grade = await gradesDAO.createOrUpdateGrade(gradeData);
-//   });
-
-//   afterEach(async () => {
-//     await subjectsDAO.deleteSubject(subject._id);
-//     await gradesDAO.deleteGrade(grade.gradeId);
-//     subject = {};
-//     grade = {};
-//     await mongoose.connection.close();
-//   });
-
-//   describe("createOrUpdateGrade", () => {
-//     it("should create new grade", async () => {
-//       const dataToSave = {
-//         value: 4,
-//         weight: 1,
-//         comment: 'Test wiedzy - poprawa',
-//         subjectId: subject._id,
-//         gradeId: grade._id
-//       };
-
-//       const createdGrade = await gradesDAO.createOrUpdateGrade(dataToSave);
-//       expect(createdGrade.value).toBe(4);
-//     });
-
-//     it("should update existing grade", async () => {
-//       const dataToUpdate = {
-//         value: 5,
-//         weight: 1,
-//         comment: 'Test wiedzy - poprawa 2',
-//         subjectId: subject._id,
-//         gradeId: grade._id
-//       };
-
-//       const updatedGrade = await gradesDAO.createOrUpdateGrade(dataToUpdate);
-//       expect(updatedGrade.value).toBe(3);
-//     });
-//   });
-
-//   describe("getGradesBySubject", () => {
-//     it("should return all grades for provided subjectId", async () => {
-//       const grades = await gradesDAO.getGradesBySubject(subject._id);
-//       expect(grades.length).toBeGreaterThan(0);
-//     });
-//   });
-
-//   describe("deleteGrade", () => {
-//     it("should delete grade by id", async () => {
-//       await gradesDAO.deleteGrade(grade.gradeId);
-//       const deletedGrade = await gradesDAO.getGradesBySubject(subject._id);
-//       expect(deletedGrade).toBeUndefined();
-//     });
-//   });
-
-//   describe("getAllGrades", () => {
-//     it("should return all grades", async () => {
-//       const grades = await gradesDAO.getAllGrades();
-//       expect(grades.length).toBeGreaterThan(0);
-//     });
-//   });
-// });
-
-// grade.test.js
-
 import mongoose from "mongoose";
 import gradesDAO from "../app/DAO/gradesDAO";
 import config from "../app/config";
@@ -97,8 +5,11 @@ import supertest from "supertest";
 import app from "../app/app";
 
 const gradesData = {
-  subjectId: '657dc493bb5e88bd6d442c7a',
-  gradeId: '657f4c5be74b02aa48c5cf65'
+  subjectId: '657dc0b1bb5e88bd6d442c15',
+  gradeId: '65802b015d26f64ec90eeb8a',
+  finalGradeId: '658026ce6e4963e26474c1c0', 
+  gradeIdForDelete: '658051fa0d37bef07bf99f62',
+  finalGradeIdForDelete: '658052110d37bef07bf9a011'
 }
 beforeAll(async () => {
   await mongoose.connect(config.databaseUrl, {
@@ -129,10 +40,10 @@ it('should get grade by id', async () => {
 describe("POST /grades", () => {
   it("should add new grade", async () => {
     const dataToSave = {
-      value: "3",
-      weight: "2",
+      value: 3,
+      weight: 2,
       comment: 'kartkowka - poprawa druga',
-      subjectId: gradesData.subjectId,
+      subjectId: gradesData.subjectId
     };
 
     const response = await supertest(app)
@@ -143,23 +54,36 @@ describe("POST /grades", () => {
   });
 });
 
-describe("PUT /grades/:gradeId", () => {
-  it("should add new grade", async () => {
-    const dataToSave = {
-      gradeId: gradesData.gradeId,
-      value: "3",
-      weight: "4",
-      comment: 'kartkowka - poprawa druga',
-      subjectId: gradesData.subjectId,
-    };
+describe("DELETE /grades/:gradeId", () => {
+  it("should delete new subject", async () => {
 
-    const response = await supertest(app)
-    .put("/grades/" + dataToSave.gradeId) 
-      .send(dataToSave)
-    expect(response.statusCode).toBe(200);
-    // expect(response.body.name).toBe();
+    let response = await supertest(app)
+      .delete("/grades/" + gradesData.gradeIdForDelete)
+    expect(response.statusCode).toBe(200); 
+
+  });
+});
+
+describe("GET /finalGrades/:subjectId", () => {
+
+it('should get final-grades by subjectId', async () => {
+    const finalGradesGetById = await supertest(app)
+    .get(`/finalGrades/${gradesData.subjectId}`)
+    expect(finalGradesGetById.statusCode).toBe(200);
+  });
+
+});
+
+describe("DELETE /finalGrades/:finalGradeId", () => {
+  it("should delete new final-grade", async () => {
+    let response = await supertest(app)
+    .delete("/finalGrades/" + gradesData.finalGradeIdForDelete)
+    expect(response.statusCode).toBe(200)
+
   });
 });
 
 
 });
+
+

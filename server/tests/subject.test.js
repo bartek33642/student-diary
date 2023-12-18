@@ -1,5 +1,3 @@
-//subject.test.js
-
 import mongoose from "mongoose";
 import subjectsDAO from "../app/DAO/subjectsDAO";
 import config from "../app/config";
@@ -7,7 +5,9 @@ import supertest from "supertest";
 import app from "../app/app";
 
 const subjectData = {
-    subjectId: '657dc493bb5e88bd6d442c7a'
+    subjectId: '657dc0b1bb5e88bd6d442c15', 
+    subjectIdForDelete: '658052290d37bef07bf9a03d' 
+
   }
 beforeAll(async () => {
   await mongoose.connect(config.databaseUrl, {
@@ -39,21 +39,25 @@ describe('Subjects DAO', () => {
   describe("POST /subjects", () => {
     it("should add new subject", async () => {
       const dataToSave = {
-        name: "Historia"
+        name: "Historia i społeczeństwo"
       };
     
       let response = await supertest(app)
         .post("/subjects")
         .send(dataToSave)
-      expect(response.statusCode).toBe(201); // Sprawdź, czy kod statusu to 201
-      expect(response.body.name).toBe(dataToSave.name); // Sprawdź, czy nazwa zwróconego przedmiotu jest taka sama jak nazwa wysłanego przedmiotu
+      expect(response.statusCode).toBe(201); 
+      expect(response.body.name).toBe(dataToSave.name);
+
+    });
+  });
+
+  describe("DELETE /subjects/:subjectId", () => {
+    it("should delete new subject", async () => {
+
+      let response = await supertest(app)
+        .delete("/subjects/" + subjectData.subjectIdForDelete)
+      expect(response.statusCode).toBe(200); 
   
-      // // Teraz spróbujmy dodać ten sam przedmiot ponownie
-      // response = await supertest(app)
-      //   .post("/subjects")
-      //   .send(dataToSave)
-      // expect(response.statusCode).toBe(400); // Powinniśmy otrzymać kod statusu 400, ponieważ przedmiot o tej nazwie już istnieje
-      // expect(response.body.error).toBe('Przedmiot o tej nazwie już istnieje.'); // Sprawdź, czy komunikat o błędzie jest poprawny
     });
   });
   

@@ -26,7 +26,7 @@ export const subjectEndpoint = (router) => {
   
     try {
       const subjectArray = await business.getSubjectsManager(subjectId).query();
-      console.log("Co zwraca stała subject:", subjectArray);
+      // console.log("Co zwraca stała subject:", subjectArray);
   
       if (!subjectArray || subjectArray.length === 0) {
         return res.status(404).json({ error: 'Przedmiot o podanym ID nie istnieje.' });
@@ -133,14 +133,14 @@ export const subjectEndpoint = (router) => {
     const subjectId = req.params.id;
 
     if (!isValidObjectId(subjectId)) {
-      console.log("Jesteś w if i subjectId jest takie: ",subjectId);
+      // console.log("Jesteś w if i subjectId jest takie: ",subjectId);
       return res.status(400).json({ error: 'Nieprawidłowy format ID przedmiotu.' });
-      console.log("Jesteś w if, ale po returnie i subjectId jest takie: ",subjectId);
+      // console.log("Jesteś w if, ale po returnie i subjectId jest takie: ",subjectId);
     }
 
     try {
       const deletedSubject = await business.getSubjectsManager().deleteSubject(subjectId);
-      console.log("Wartość deletedSubject:", deletedSubject);
+      // console.log("Wartość deletedSubject:", deletedSubject);
       if (!deletedSubject) {
         return res.status(404).json({ error: 'Przedmiot o podanym ID nie istnieje.' });
       }

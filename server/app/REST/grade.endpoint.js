@@ -53,6 +53,7 @@ router.put('/grades/:gradeId', [
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    // console.log('z endpointa błąd', errors.array()); 
     return res.status(400).json({ errors: errors.array() });
   }
 
@@ -60,8 +61,9 @@ router.put('/grades/:gradeId', [
     const gradeId = req.params.gradeId;
     const gradeData = req.body;
     gradeData.gradeId = gradeId;
+    // console.log(gradeId, ' + ', gradeData, 'gradeId + gradeData');
     const updatedGrade = await gradesManager.create().createOrUpdateGrade(gradeData);
-    res.json(updatedGrade);
+    res.status(200).json(updatedGrade);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
