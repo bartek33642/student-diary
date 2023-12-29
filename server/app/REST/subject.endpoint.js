@@ -1,4 +1,5 @@
 import { body, validationResult } from 'express-validator';
+import mongoose from 'mongoose';
 import business from "../business/business.container";
 import { isValidObjectId } from "mongoose";
 const express = require('express');
@@ -151,6 +152,16 @@ export const subjectEndpoint = (router) => {
     } catch (error) {
       console.error('Błąd podczas usuwania przedmiotu:', error);
       res.status(500).json({ error: 'Wystąpił błąd podczas usuwania przedmiotu.' });
+    }
+  });
+
+  router.get('/count-of-subjects', async (req, res) => {
+    try {
+      const countOfSubjects = await mongoose.connection.collection('subjects').countDocuments({});
+      res.json({ countOfSubjects });
+    } catch (err) {
+      console.error("An error occurred:", err);
+      res.status(500).send(err);
     }
   });
 };

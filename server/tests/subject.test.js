@@ -60,5 +60,18 @@ describe('Subjects DAO', () => {
   
     });
   });
-  
+
+  describe("GET /count-of-subjects", () => {
+    it("should get the count of subjects", async () => {
+      try {
+        const response = await supertest(app).get("/count-of-subjects");
+        expect(response.statusCode).toBe(200);
+        expect(response.body.countOfSubjects).toBeDefined();
+        expect(typeof response.body.countOfSubjects).toBe("number");
+      } catch (error) {
+        console.error("An error occurred during the test:", error);
+        throw error;
+      }
+    });
+  });
 });

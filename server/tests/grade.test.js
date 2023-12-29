@@ -83,6 +83,34 @@ describe("DELETE /finalGrades/:finalGradeId", () => {
   });
 });
 
+describe("GET /count-of-all-grades", () => {
+  it("should get the count of all grades", async () => {
+    try {
+      const response = await supertest(app).get("/count-of-all-grades");
+      expect(response.statusCode).toBe(200);
+      expect(response.body.countOfGrades).toBeDefined();
+      expect(typeof response.body.countOfGrades).toBe("number");
+    } catch (error) {
+      console.error("An error occurred during the test:", error);
+      throw error;
+    }
+  });
+});
+
+describe("GET /count-of-final-grades", () => {
+  it("should get the count of final grades", async () => {
+    try {
+      const response = await supertest(app).get("/count-of-final-grades");
+      expect(response.statusCode).toBe(200);
+      expect(response.body.countOfFinalGrades).toBeDefined();
+      expect(typeof response.body.countOfFinalGrades).toBe("number");
+    } catch (error) {
+      console.error("An error occurred during the test:", error);
+      throw error;
+    }
+  });
+});
+
 
 });
 

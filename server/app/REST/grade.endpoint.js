@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import gradesManager from '../business/grades.manager';
@@ -135,6 +136,28 @@ router.delete('/finalGrades/:finalGradeId', async (req, res) => {
     res.json({ message: 'Final grade deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/count-of-all-grades', async (req, res) => {
+  try {
+    const countOfGrades = await mongoose.connection.collection('grades').countDocuments({});
+    console.log(`Counted ${countOfGrades} documents.`);
+    res.json({ countOfGrades });
+  } catch (err) {
+    console.error("An error occurred:", err);
+    res.status(500).send(err);
+  }
+});
+
+router.get('/count-of-final-grades', async (req, res) => {
+  try {
+    const countOfFinalGrades = await mongoose.connection.collection('finalGrades').countDocuments({});
+    console.log(`Counted ${countOfFinalGrades} documents.`);
+    res.json({ countOfFinalGrades });
+  } catch (err) {
+    console.error("An error occurred:", err);
+    res.status(500).send(err);
   }
 });
 
