@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./SettingsStyle.css";
 import packageJson from '../../../package.json';
 import countAge from "../../functionality/countAge";
+import genderOfName from "../../functionality/genderOfName";
 
 export const Settings = () => {
   const [userData, setUserData] = useState(null);
@@ -71,26 +72,38 @@ export const Settings = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditedUserData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    console.log(`handleInputChange - Received input: ${name} = ${value}`);
+    setEditedUserData((prevData) => {
+      const newState = {
+        ...prevData,
+        [name]: value,
+      };
+      console.log('handleInputChange - Updated state:', newState);
+      return newState;
+    });
   };
 
   const handleSaveEdit = async () => {
     try {
       const userId = userData._id;
+      const editedData = {
+        ...editedUserData,
+        birth_date: editedUserData.birth_date.split('T')[0], // Usuń informacje o czasie
+      };
+      console.log('handleSaveEdit - Sending data to server:', editedData);
       const response = await fetch(`http://localhost:3001/user/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editedUserData),
+        body: JSON.stringify(editedData),
       });
-
+      console.log('handleSaveEdit - Received response:', response);
+  
       if (response.ok) {
-        console.log("Zaktualizowano dane użytkownika");
+        console.log("handleSaveEdit - Updating state with edited data:", editedUserData);
         setUserData(editedUserData);
+        console.log("handleSaveEdit - Updated state:", userData);
         setIsEditing(false);
       } else {
         console.error('Błąd podczas aktualizacji danych użytkownika:', response.statusText);
@@ -119,6 +132,7 @@ export const Settings = () => {
                 <h5>
                   <p>{`Imię: ${userData.first_name}`}</p>
                   <p>{`Nazwisko: ${userData.second_name}`}</p>
+                  <p>{`Płeć: ${genderOfName(userData.first_name)}`}</p>
                   <p>{`Data urodzenia: ${formatDate(userData.birth_date)}`}</p>
                   <p>{`W tej chwili masz lat: ${countAge(userData.birth_date)}`}</p>
                 </h5>

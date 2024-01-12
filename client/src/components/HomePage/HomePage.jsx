@@ -29,17 +29,22 @@ export const HomePage = () => {
   const [userName, setUserName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [birthDate, setBirthDate] = useState('');
-
-
+  const [formState, setFormState] = useState({
+    userName: '',
+    secondName: '',
+    birthDate: '',
+  });
 
   useEffect(() => {
-    // Pobierz dane użytkownika przy montowaniu komponentu
+    console.log('useEffect - Fetching user data');
     fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
+      console.log('fetchUserData - Fetching user data');
       const response = await fetch('http://localhost:3001/user');
+      console.log('fetchUserData - Received response:', response);
       if (response.ok) {
         const users = await response.json();
         const firstUser = users[0]; 
@@ -55,36 +60,38 @@ export const HomePage = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setSubjectName(''); // Wyczyść nazwę przedmiotu po zamknięciu modala
+    setSubjectName('');
   };
 
-  const handleOpen2 = () => setOpen2(true);
+  const handleOpen2 = () => {
+    console.log('handleOpen2 - Opening second modal');
+    setOpen2(true);
+  };
 
   const handleClose2 = () => {
+    console.log('handleClose2 - Closing second modal');
     setUserName('');
     setSecondName('');
     setBirthDate('');
-    setOpen2(false); // Przenieś zamknięcie okna do tego miejsca
+    setOpen2(false);
   };
   
-  
-  const handleInputChange2 = (e) => {
-    const { name, value } = e.target;
-    if (name === 'userName') {
-      setUserName(value);
-    } else if (name === 'secondName') {
-      setSecondName(value);
-    } else if (name === 'birthDate') {
-      setBirthDate(value);
-    }
+  const handleInputChange2 = (event) => {
+    const { name, value } = event.target;
+    console.log(`handleInputChange2 - Received input: ${name} = ${value}`);
+    setFormState(prevState => {
+      const newState = {
+        ...prevState,
+        [name]: value,
+      };
+      console.log('handleInputChange2 - Updated form state:', newState);
+      return newState;
+    });
   };
 
   const handleInputChange = (e) => {
     setSubjectName(e.target.value);
   };
-
-
-  
 
   const handleSave = async () => {
     try {
@@ -100,7 +107,7 @@ export const HomePage = () => {
         toast.success('Przedmiot został dodany pomyślnie');
         handleClose();
       } else {
-        const errorData = await response.json(); // Dodaj tę linię
+        const errorData = await response.json();
         toast.error(`Błąd podczas dodawania przedmiotu: ${errorData.message}`);
       }
     } catch (error) {
@@ -109,35 +116,44 @@ export const HomePage = () => {
   };
   
   const handleSave2 = async (e) => {
-    e.preventDefault(); // Zapobiegaj domyślnemu zachowaniu przycisku submit
+    e.preventDefault();
+  
+    if (!formState.userName || !formState.secondName || !formState.birthDate) {
+      console.log('handleSave2 - Form validation failed');
+      toast.error('Wszystkie pola formularza muszą być wypełnione');
+      return;
+    }
+  
+    console.log('handleSave2 - Form validation passed');
+    console.log('handleSave2 - Sending form data to server:', formState);
   
     try {
+      console.log('handleSave2 - Before sending request');
       const response = await fetch('http://localhost:3001/add-user', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ first_name: userName, second_name: secondName, birth_date: birthDate }),
+        body: JSON.stringify({ first_name: formState.userName, second_name: formState.secondName, birth_date: formState.birthDate }),
       });
+      console.log('handleSave2 - After sending request');
+      console.log('handleSave2 - Response:', response);
   
       if (response.ok) {
         toast.success('Użytkownik został dodany pomyślnie');
         handleClose2();
         window.location.reload();
       } else {
-        const errorData = await response.json(); // Dodaj tę linię
+        const errorData = await response.json();
         toast.error(`Błąd podczas dodawania Użytkownika: ${errorData.message}`);
       }
     } catch (error) {
       toast.error(`Błąd podczas komunikacji z serwerem: ${error.message}`);
     }
   };
-  
-
 
   return (
     <div className="home-page-container">
-
       <div className="home-page-container-header-elements">
         <div className="home-page-hamburger">
           <Link to="/menu"><RiMenuFill className="home-page-rimenufill" /></Link>
@@ -175,27 +191,29 @@ export const HomePage = () => {
         </Modal>
       </div>
 
-      <div className="home-page-container-button">
-        <button className="home-page-button" type="button" onClick={handleOpen2}>Podaj swoje dane</button>
-        <Modal
-          open={open2}
-          onClose={handleClose2}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Podaj swoje dane:
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Imię: <Input type="text" name="userName" value={userName} onChange={handleInputChange2} required/> <br />
-              Nazwisko: <Input type="text" name="secondName" value={secondName} onChange={handleInputChange2} required/> <br />
-              Data urodzenia: <Input type="date" name="birthDate" value={birthDate} onChange={handleInputChange2} required/>
-              <Input type="submit" value="Zapisz" onClick={handleSave2} />
-            </Typography>
-          </Box>
-        </Modal>
-      </div>
+      {!userName && (
+        <div className="home-page-container-button">
+          <button className="home-page-button" type="button" onClick={handleOpen2}>Podaj swoje dane</button>
+          <Modal
+            open={open2}
+            onClose={handleClose2}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Podaj swoje dane:
+              </Typography>
+              <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                Imię: <Input type="text" name="userName" value={formState.userName} onChange={handleInputChange2} required/> <br />
+                Nazwisko: <Input type="text" name="secondName" value={formState.secondName} onChange={handleInputChange2} required/> <br />
+                Data urodzenia: <Input type="date" name="birthDate" value={formState.birthDate} onChange={handleInputChange2} required/>
+                <Input type="submit" value="Zapisz" onClick={handleSave2} />
+              </Typography>
+            </Box>
+          </Modal>
+        </div>
+      )}
     </div>
   );
 };
