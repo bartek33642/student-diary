@@ -3,6 +3,7 @@ import { RiMenuFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import "./SettingsStyle.css";
 import packageJson from '../../../package.json';
+import countAge from "../../functionality/countAge";
 
 export const Settings = () => {
   const [userData, setUserData] = useState(null);
@@ -108,6 +109,7 @@ export const Settings = () => {
           </Link>
         </div>
 
+        <div className="container-with-divs">
         <h1 className="settings-h1">O użytkowniku</h1>
 
         <div className="information-about-app-user">
@@ -118,9 +120,10 @@ export const Settings = () => {
                   <p>{`Imię: ${userData.first_name}`}</p>
                   <p>{`Nazwisko: ${userData.second_name}`}</p>
                   <p>{`Data urodzenia: ${formatDate(userData.birth_date)}`}</p>
+                  <p>{`W tej chwili masz lat: ${countAge(userData.birth_date)}`}</p>
                 </h5>
               ) : (
-                <div>
+                <div className="form-from-settings">
                   <input
                     type="text"
                     name="first_name"
@@ -172,6 +175,7 @@ export const Settings = () => {
             <p>Umożliwia dodawanie przedmiotów, ocen oraz sprawdzanie średnich.</p>
             <p>Wersja aplikacji: {packageJson.version}</p>
           </h5>
+        </div>
         </div>
       </div>
     </div>

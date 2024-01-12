@@ -12,35 +12,42 @@
     margin-top: 40px;
     color: white;
     font-size: 20pt;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
 }
 
 .information-about-app p {
     line-height: 3em;
 }
 
+.container-with-divs {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
 .information-about-app-user {
     margin-top: 40px;
     color: white;
     font-size: 20pt;
+}
+
+.form-from-settings {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 60%;
+    width: 35%;
 }
 
 .information-about-app-user button {
-    background-color: rgb(41, 64, 196);
-    height: 60px;
-    width: 155px;
+    background-color: rgb(0, 3, 194);
+    border: none;
     color: white;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
     cursor: pointer;
-    margin-left: 5px;
-    border: 1px solid;
 }
 
 
