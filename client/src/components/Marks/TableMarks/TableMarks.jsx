@@ -14,6 +14,9 @@ import gradesColors from "../../../functionality/gradesColors";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { ViewSubject } from "../../ViewSubject/ViewSubject";
 import uppercaseFirstLetterOfSubject from "../../../functionality/uppercaseFirstLetterOfSubject";
+import '../../../../node_modules/react-vis/dist/style.css';
+import RadialChartComponent from "./RadialChart";
+import { XYPlot, VerticalBarSeries, YAxis, XAxis } from 'react-vis';
 
 export const TableMarks = () => {
 
@@ -325,7 +328,44 @@ export const TableMarks = () => {
   if (isLoading || grades.length === 0 || Object.keys(finalGrades).length === 0) {
     return <div>Loading...</div>;
   }
+
+
+
+  const gradesCount = grades.reduce((countMap, grade) => {
+    const value = grade.value;
+    countMap[value] = (countMap[value] || 0) + 1;
+    return countMap;
+  }, {});
+  
+  const myData = Object.entries(gradesCount).map(([value, count]) => ({
+    angle: count,
+    label: `Ocena ${value}`,
+  }));
+  
+
+  const countGradesBySubject = (grades, subjects) => {
+    const counts = subjects.map((subject, i) => {
+      console.log("i", i);
+      const subjectGrades = grades.filter((grade) => grade.subjectId === subject._id);
+      return {
+        x: i,
+        y: subjectGrades.length,
+        label: subject.name
+      };
+    });
+  
+    return counts;
+  };
+  
+  // Użyj tej funkcji w komponencie:
+  const barChartData = countGradesBySubject(grades, subjects);
+  console.log("barChartData", barChartData);
+  
+
+  
+  
   return (
+    <>
     <div className="marks-table">
       <table className="table-of-grades">
         <thead>
@@ -437,6 +477,20 @@ export const TableMarks = () => {
           </Button>
         </DialogContent>
       </Dialog>
+
     </div>
+          <div>
+        <h3>Diagram kołowy</h3>
+      <RadialChartComponent data={myData}/>
+
+      ----
+      <XYPlot height={200} width={200}>
+  <VerticalBarSeries data={barChartData} />
+  <XAxis title="Przedmioty" />
+  <YAxis title="Liczba ocen" />
+</XYPlot>
+
+      </div>
+    </ >
   );
 };

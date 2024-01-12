@@ -13,6 +13,7 @@
     "react-tippy": "^1.4.0",
     "react-toastify": "^9.1.3",
     "react-tooltip": "^5.23.0",
+    "react-vis": "^1.12.1",
     "rxjs": "^7.8.1",
     "web-vitals": "^2.1.4"
   },
