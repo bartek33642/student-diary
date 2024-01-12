@@ -11,8 +11,6 @@ function createUser(context) {
     }
   }
 
-  
-
   async function addUser(data) {
     try {
       console.log("Jesteś w createUser - user.manager");
@@ -30,9 +28,18 @@ function createUser(context) {
     }
   }
 
+  async function updateUser(userId, data) {
+    try {
+      return await userDAO.updateUser(userId, data);
+    } catch (error) {
+      throw new Error(`Błąd podczas aktualizacji użytkownika: ${error.message}`);
+    }
+  }
+
   return {
     getUsers: getUsers,
     addUser: addUser,
+    updateUser: updateUser,
     removeUser: removeUser,
   };
 }

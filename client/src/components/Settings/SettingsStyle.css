@@ -15,8 +15,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    
 }
 
 .information-about-app p {
+    line-height: 3em;
+}
+
+.information-about-app-user {
+    margin-top: 40px;
+    color: white;
+    font-size: 20pt;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60%;
+}
+
+.information-about-app-user button {
+    background-color: rgb(41, 64, 196);
+    height: 60px;
+    width: 155px;
+    color: white;
+    cursor: pointer;
+    margin-left: 5px;
+    border: 1px solid;
+}
+
+
+.information-about-app-user p {
     line-height: 3em;
 }

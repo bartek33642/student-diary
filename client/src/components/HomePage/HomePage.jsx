@@ -196,31 +196,6 @@ export const HomePage = () => {
           </Box>
         </Modal>
       </div>
-{/* {userName ? null : (
-      <div className="home-page-container-button">
-        <button className="home-page-button" type="button" onClick={handleOpen2}>
-          Podaj swoje dane
-        </button>
-        <Modal
-          open={open2}
-          onClose={handleClose2}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Podaj swoje dane:
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Imię: <Input type="text" name="userName" value={userName} onChange={handleInputChange2} /> <br />
-              Nazwisko: <Input type="text" name="secondName" value={secondName} onChange={handleInputChange2} /> <br />
-              Data urodzenia: <Input type="date" name="birthDate" value={birthDate} onChange={handleInputChange2} />
-              <button type="submit" onClick={handleSave2}>Zapisz</button>
-            </Typography>
-          </Box>
-        </Modal>
-      </div>
-    )} */}
     </div>
   );
 };

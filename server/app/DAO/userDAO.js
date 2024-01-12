@@ -35,27 +35,32 @@ async function addUser(data) {
   try {
     console.log('Received userId:', data.userId);
 
-    if (!data.userId) {
-    //   console.log('Przed retun w userDAO - !data.userId');
-      return await new UserModel(data).save();
+    const anyUser = await UserModel.findOne({});
+    if (anyUser) {
+      throw new Error(`Już istnieje użytkownik w bazie danych.`);
     } else {
-      const existingUser = await UserModel.findOne({ _id: data.userId });
-      if (existingUser) {
-        return await UserModel.findOneAndUpdate(
-          { userId: data.userId },
-          {
-            first_name: data.first_name,
-            second_name: data.second_name,
-            birth_date: data.birth_date
-          },
-          { new: true }
-        );
+      if (!data.userId) {
+        return await new UserModel(data).save();
       } else {
-        throw new Error(`Użytkownik o userId: ${data.userId} nie istnieje.`);
+        const existingUser = await UserModel.findOne({ _id: data.userId });
+        if (existingUser) {
+          return await UserModel.findOneAndUpdate(
+            { userId: data.userId },
+            {
+              first_name: data.first_name,
+              second_name: data.second_name,
+              birth_date: data.birth_date
+            },
+            { new: true }
+          );
+        } else {
+          throw new Error(`Użytkownik o userId: ${data.userId} nie istnieje.`);
+        }
       }
     }
   } catch (error) {
-    throw new Error(`Błąd w trakcie tworzenia lub aktualizacji użytkownika: ${error.message}`);
+    console.error(`Błąd w trakcie tworzenia użytkownika: ${error.message}`);
+    throw error;
   }
 }
 
@@ -69,10 +74,28 @@ async function deleteUser(userId) {
   }
 }
 
+async function updateUser(userId, data) {
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: userId },
+      data,
+      { new: true }
+    );
+    if (!updatedUser) {
+      throw new Error(`Użytkownik o userId: ${userId} nie istnieje.`);
+    }
+    return updatedUser;
+  } catch (error) {
+    console.error(`Błąd podczas aktualizacji użytkownika: ${error.message}`);
+    throw error;
+  }
+}
+
 export default {
   query:  query,
   getUser: getUser,
   addUser: addUser,
   deleteUser: deleteUser,
+  updateUser: updateUser,
   UserModel,
 };

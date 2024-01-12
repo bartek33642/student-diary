@@ -18,7 +18,7 @@ export const Menu = () => {
                 <Link to="/" className="menu-link-style"><li className="menu-li-style">Strona główna</li></Link>
                 <Link to="/marks" className="menu-link-style"><li className="menu-li-style">Oceny</li></Link>
                 <Link to="/viewsubject" className="menu-link-style"><li className="menu-li-style">Przedmioty</li></Link>
-                <Link to="/settings" className="menu-link-style"><li className="menu-li-style">O aplikacji</li></Link>
+                <Link to="/settings" className="menu-link-style"><li className="menu-li-style">Ustawienia</li></Link>
             </ul>
 
         </div>
