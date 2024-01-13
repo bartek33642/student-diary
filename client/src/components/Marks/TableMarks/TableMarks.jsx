@@ -16,7 +16,8 @@ import { ViewSubject } from "../../ViewSubject/ViewSubject";
 import uppercaseFirstLetterOfSubject from "../../../functionality/uppercaseFirstLetterOfSubject";
 import '../../../../node_modules/react-vis/dist/style.css';
 import RadialChartComponent from "./RadialChart";
-import { XYPlot, VerticalBarSeries, YAxis, XAxis } from 'react-vis';
+import BarChartComponent from "./BarChart";
+import LineChartComponent from "./LineChart";
 
 export const TableMarks = () => {
 
@@ -27,6 +28,8 @@ export const TableMarks = () => {
   const [selectedGrade, setSelectedGrade] = useState(null); // Dodaj nowy stan do przechowywania informacji o wybranej ocenie
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   // const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+  const [selectedPoint, setSelectedPoint] = useState(null);
+  const [isChartsVisible, setIsChartsVisible] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -362,7 +365,27 @@ export const TableMarks = () => {
   console.log("barChartData", barChartData);
   
 
+
+  const countGrades = (grades) => {
+    const counts = grades.map((grades, i) => {
+      console.log("i", i);
+      return {
+        x: i,
+        y: grades.value,
+        label: grades.value.toString(),
+      };
+    });
   
+    return counts;
+  };
+  
+  // Użyj tej funkcji w komponencie:
+  const lineChartData = countGrades(grades);
+  console.log("lineChartData", lineChartData);
+  
+  const handleToggleCharts = () => {
+    setIsChartsVisible(!isChartsVisible);
+  };
   
   return (
     <>
@@ -479,18 +502,32 @@ export const TableMarks = () => {
       </Dialog>
 
     </div>
-          <div>
-        <h3>Diagram kołowy</h3>
-      <RadialChartComponent data={myData}/>
-
-      ----
-      <XYPlot height={200} width={200}>
-  <VerticalBarSeries data={barChartData} />
-  <XAxis title="Przedmioty" />
-  <YAxis title="Liczba ocen" />
-</XYPlot>
-
+    <div className="div-button-diagrams"><button onClick={handleToggleCharts} className="grade-button" >
+        {isChartsVisible ? "Ukryj wykresy" : "Pokaż wykresy"}
+      </button></div>
+      {isChartsVisible && (
+      <div className="table-marks-diagram">
+              
+      <div className="diagram-container-header">
+      <h3>Diagram kołowy</h3>
+      <h3>Diagram słupkowy</h3>
+      <h3>Diagram liniowy</h3>
       </div>
+
+      <div className="diagram-container">
+      <RadialChartComponent data={myData}/>
+      <BarChartComponent barChartData={barChartData} />
+      <LineChartComponent lineChartData={lineChartData} selectedPoint={selectedPoint} setSelectedPoint={setSelectedPoint} />
+      </div>
+
+      
+
+
+     
+
+       
+     </div> 
+     )}
     </ >
   );
 };

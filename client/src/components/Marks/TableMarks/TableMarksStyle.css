@@ -48,6 +48,38 @@
   color: white;
 }
 
+.table-marks-diagram{
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+}
+
+
+.div-button-diagrams{
+  display: flex;
+  justify-content: center
+}
+
+.diagram-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly; /* Distribute space evenly between diagrams */
+  width: 100%; /* Ensure the diagrams take up the full width */
+}
+
+.diagram-container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly; /* Match the space distribution of diagrams */
+  width: 100%; /* Ensure headers take up the full width */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.rv-xy-plot__inner{
+  height: 400px;
+}
+
 
 
 @media (max-width: 915px) {
@@ -56,3 +88,4 @@
       flex-direction: column;
   }
 }
+
