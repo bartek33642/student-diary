@@ -12,5 +12,5 @@ const changeColorTable = (subjectId, color) => {
     }
   };
   
-  export default changeColorTable;
+  module.exports = changeColorTable;
   
