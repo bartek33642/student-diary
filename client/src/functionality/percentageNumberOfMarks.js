@@ -7,7 +7,7 @@ const percentageNumberOfMarks = (grades, allGrade) => {
   
     // Liczba wszystkich ocen
     const totalGrades = grades.length;
-    console.log ("allGrade", allGrade);
+    // console.log ("allGrade", allGrade);
 
     // Liczba ocen równej oczekiwanej ocenie
     const matchingGrades = grades.filter(grade => grade.value === allGrade).length;
@@ -18,5 +18,5 @@ const percentageNumberOfMarks = (grades, allGrade) => {
     return percentage;
   };
   
-  export default percentageNumberOfMarks;
+module.exports = percentageNumberOfMarks;
   
