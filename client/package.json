@@ -21,6 +21,21 @@
     "test": "jest",
     "eject": "react-scripts eject"
   },
+  "jest": {
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|jsx)$",
+    "moduleFileExtensions": ["js", "json", "jsx"],
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -47,13 +62,10 @@
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@testing-library/react-hooks": "^8.0.1",
+    "babel-jest": "^29.7.0",
     "jest": "^27.5.1",
+    "jest-dom": "^4.0.0",
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.17.0"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
   }
 }

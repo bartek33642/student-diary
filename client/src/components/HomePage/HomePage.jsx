@@ -36,15 +36,15 @@ export const HomePage = () => {
   });
 
   useEffect(() => {
-    console.log('useEffect - Fetching user data');
+    // console.log('useEffect - Fetching user data');
     fetchUserData();
   }, []);
 
   const fetchUserData = async () => {
     try {
-      console.log('fetchUserData - Fetching user data');
+      // console.log('fetchUserData - Fetching user data');
       const response = await fetch('http://localhost:3001/user');
-      console.log('fetchUserData - Received response:', response);
+      // console.log('fetchUserData - Received response:', response);
       if (response.ok) {
         const users = await response.json();
         const firstUser = users[0]; 
