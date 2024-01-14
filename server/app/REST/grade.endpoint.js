@@ -80,6 +80,17 @@ router.delete('/grades/:gradeId', async (req, res) => {
   }
 });
 
+router.get('/count-of-all-grades', async (req, res) => {
+  try {
+    const countOfGrades = await mongoose.connection.collection('grades').countDocuments({});
+    console.log(`Counted ${countOfGrades} documents.`);
+    res.json({ countOfGrades });
+  } catch (err) {
+    console.error("An error occurred:", err);
+    res.status(500).send(err);
+  }
+});
+
 // Endpointy dla ocen końcowych
 router.get('/finalGrades/:subjectId', async (req, res) => {
   try {
@@ -136,17 +147,6 @@ router.delete('/finalGrades/:finalGradeId', async (req, res) => {
     res.json({ message: 'Final grade deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
-  }
-});
-
-router.get('/count-of-all-grades', async (req, res) => {
-  try {
-    const countOfGrades = await mongoose.connection.collection('grades').countDocuments({});
-    console.log(`Counted ${countOfGrades} documents.`);
-    res.json({ countOfGrades });
-  } catch (err) {
-    console.error("An error occurred:", err);
-    res.status(500).send(err);
   }
 });
 

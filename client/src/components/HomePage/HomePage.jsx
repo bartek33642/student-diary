@@ -44,11 +44,15 @@ export const HomePage = () => {
     try {
       // console.log('fetchUserData - Fetching user data');
       const response = await fetch('http://localhost:3001/user');
-      // console.log('fetchUserData - Received response:', response);
+        // console.log('fetchUserData - Received response:', response);
       if (response.ok) {
         const users = await response.json();
-        const firstUser = users[0]; 
-        setUserName(firstUser.first_name);
+        if (users.length > 0) {
+          const firstUser = users[0];
+          setUserName(firstUser.first_name);
+        } else {
+          toast.error('Brak danych użytkownika.');
+        }
       } else {
         toast.error(`Błąd podczas pobierania danych użytkownika: ${response.statusText}`);
       }

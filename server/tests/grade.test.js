@@ -153,7 +153,7 @@ describe('Testy punktów końcowych ocen', () => {
       .send({
         value: Math.floor(Math.random() * 6) + 1,
         weight: Math.floor(Math.random() * 5) + 1,
-        comment: 'Test comment',
+        comment: 'Komentarz',
         subjectId: subjectId
       });
 
@@ -180,7 +180,7 @@ describe('Testy punktów końcowych ocen', () => {
       .send({
         value: Math.floor(Math.random() * 6) + 1,
         weight: Math.floor(Math.random() * 5) + 1,
-        comment: 'Updated test comment',
+        comment: 'Zaktualizowany komentarz testowy',
         subjectId: subjectId
       });
 
@@ -192,5 +192,12 @@ describe('Testy punktów końcowych ocen', () => {
     const res = await request(app).delete(`/grades/${createdGradeId}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('message', 'Grade deleted successfully');
+  });
+
+  it('Pobiera liczbę wszystkich ocen', async () => {
+    const res = await request(app).get('/count-of-all-grades');
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toHaveProperty('countOfGrades');
+    expect(typeof res.body.countOfGrades).toBe('number');
   });
 });
