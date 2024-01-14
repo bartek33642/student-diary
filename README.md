@@ -64,12 +64,6 @@ Zainstaluj zależności
   npm start
 ``` 
 
-##  Autorzy
-
-- [@wiktor34306](https://www.github.com/wiktor34306)
-- [@bartek33642](https://www.github.com/bartek33642)
-=======
-
 
 ## Uruchomienie testów jenostkowych i integracyjnych
  - po stronie serwera 
