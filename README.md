@@ -63,8 +63,8 @@ Zainstaluj zależności
   cd client
   npm start
 ``` 
-<<<<<<< HEAD
-## Authors - Autorzy
+
+##  Autorzy
 
 - [@wiktor34306](https://www.github.com/wiktor34306)
 - [@bartek33642](https://www.github.com/bartek33642)
@@ -301,7 +301,6 @@ Zainstaluj zależności
 | TC_21   |  Scenariusz sprawdzenia poprawności wyświetlania danych osobowych użytkownika, w zakładce „Ustawienia” –> „O użytkowniku”  |1.	Naciśnij przycisk „Hamburgera” znajdujący się w lewym górnym rogu aplikacji 2.	Kliknij w zakładkę „Ustawienia” 3.	Sprawdź, czy w sekcji „O użytkowniku”, zgadzają się dane osobowe, wprowadzone wcześniej do aplikacji  | Dane osobowe użytkownika poprawnie wyświetlają się w zakładce „Ustawienia” |
 | TC_22   |  Scenariusz modyfikacji danych osobowych użytkownika  |1.	Naciśnij przycisk „Hamburgera” znajdujący się w lewym górnym rogu aplikacji 2.	Kliknij w zakładkę „Ustawienia” 3.	W sekcji „O użytkowniku”, kliknij przycisk „Edytuj dane użytkownika” 4.	W pojawiających się polach („Imię”, „Nazwisko”, „Data urodzenia”), zweryfikuj dane i popraw wybrane dane 5.	Po wprowadzeniu zmian, zatwierdź zmiany, klikając w przycisk „Zapisz zmiany”  | Modyfikacja danych osobowych się powiodła i  zmienione dane użytkownika wyświetlają się w aplikacji |
 | TC_23   |  Scenariusz usunięcia danych użytkownika   |1.	Naciśnij przycisk „Hamburgera” znajdujący się w lewym górnym rogu aplikacji 2.	Kliknij w zakładkę „Ustawienia” 3.	W sekcji „O użytkowniku”, kliknij przycisk „Usuń użytkownika” 4.	Po pomyślnym usunięciu danych, we wspomnianej sekcji wyświetla się tekst „Brak danych w bazie”   | Dane użytkownika zostają poprawnie usunięte |
->>>>>>> final-grades-test-integration
 
 
 ## Technologie użyte w projekcie
