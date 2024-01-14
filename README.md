@@ -65,7 +65,7 @@ Zainstaluj zależności
 ``` 
 
 
-## Uruchomienie testów jenostkowych i integracyjnych
+## Uruchomienie testów jednostkowych i integracyjnych
  - po stronie serwera 
  
 ```bash
