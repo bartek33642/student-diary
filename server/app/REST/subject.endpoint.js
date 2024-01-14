@@ -41,7 +41,7 @@ export const subjectEndpoint = (router) => {
   
       const subjectName = nameOfSubject.name;
   
-      res.json({ name: subjectName });
+      res.json({ _id: subjectId, name: subjectName });
     } catch (error) {
       console.error('Błąd podczas pobierania przedmiotu:', error);
       res.status(500).json({ error: 'Wystąpił błąd podczas pobierania przedmiotu.' });

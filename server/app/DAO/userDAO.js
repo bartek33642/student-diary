@@ -33,7 +33,7 @@ async function getUser(id) {
 
 async function addUser(data) {
   try {
-    console.log('Received userId:', data.userId);
+    // console.log('Received userId:', data.userId);
 
     const anyUser = await UserModel.findOne({});
     if (anyUser) {
@@ -66,7 +66,7 @@ async function addUser(data) {
 
 async function deleteUser(userId) {
   try {
-    console.log('Deleting user...');
+    // console.log('Deleting user...');
     return UserModel.findOneAndDelete({ _id: userId });
   } catch (error) {
     console.error(`Error in deleteUser: ${error.message}`);
