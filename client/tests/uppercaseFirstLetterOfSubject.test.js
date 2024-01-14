@@ -2,11 +2,11 @@ const uppercaseFirstLetterOfSubject = require('../src/functionality/uppercaseFir
 
 // Test poprawności danych
 test('Uppercase first letter of a valid subject name', () => {
-    lowerCasePhrase = 'matematyka'
-    upperCasePhrase = 'Matematyka'
-    const result = uppercaseFirstLetterOfSubject(lowerCasePhrase);
-    expect(result).toBe(upperCasePhrase);
-  });
+  const lowerCasePhrase = 'matematyka';
+  const upperCasePhrase = 'Matematyka';
+  const result = uppercaseFirstLetterOfSubject(lowerCasePhrase);
+  expect(result).toBe(upperCasePhrase);
+});
   
   // Test dla pustego stringa
   test('Uppercase first letter of an empty subject name', () => {

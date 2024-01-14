@@ -14,6 +14,11 @@ import gradesColors from "../../../functionality/gradesColors";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { ViewSubject } from "../../ViewSubject/ViewSubject";
 import uppercaseFirstLetterOfSubject from "../../../functionality/uppercaseFirstLetterOfSubject";
+import '../../../../node_modules/react-vis/dist/style.css';
+import RadialChartComponent from "./RadialChart";
+import BarChartComponent from "./BarChart";
+import LineChartComponent from "./LineChart";
+import percentageNumberOfMarks from "../../../functionality/percentageNumberOfMarks";
 
 export const TableMarks = () => {
 
@@ -24,6 +29,12 @@ export const TableMarks = () => {
   const [selectedGrade, setSelectedGrade] = useState(null); // Dodaj nowy stan do przechowywania informacji o wybranej ocenie
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   // const [selectedSubjectId, setSelectedSubjectId] = useState(null);
+  const [selectedPoint, setSelectedPoint] = useState(null);
+  const [isChartsVisible, setIsChartsVisible] = useState(false);
+
+  const [selectedGradeForPercentage, setSelectedGradeForPercentage] = useState(null);
+  const [percentageResult, setPercentageResult] = useState(null);
+
 
   const fetchData = async () => {
     try {
@@ -325,7 +336,83 @@ export const TableMarks = () => {
   if (isLoading || grades.length === 0 || Object.keys(finalGrades).length === 0) {
     return <div>Loading...</div>;
   }
+
+
+
+  const gradesCount = grades.reduce((countMap, grade) => {
+    const value = grade.value;
+    countMap[value] = (countMap[value] || 0) + 1;
+    return countMap;
+  }, {});
+  
+  const myData = Object.entries(gradesCount).map(([value, count]) => ({
+    angle: count,
+    label: `Ocena ${value}`,
+  }));
+  
+
+  const countGradesBySubject = (grades, subjects) => {
+    const counts = subjects.map((subject, i) => {
+      console.log("i", i);
+      const subjectGrades = grades.filter((grade) => grade.subjectId === subject._id);
+      return {
+        x: i,
+        y: subjectGrades.length,
+        label: subject.name
+      };
+    });
+  
+    return counts;
+  };
+  
+  // Użyj tej funkcji w komponencie:
+  const barChartData = countGradesBySubject(grades, subjects);
+  console.log("barChartData", barChartData);
+  
+
+
+  const countGrades = (grades) => {
+    const counts = grades.map((grades, i) => {
+      console.log("i", i);
+      return {
+        x: i,
+        y: grades.value,
+        label: grades.value.toString(),
+      };
+    });
+  
+    return counts;
+  };
+  
+  // Użyj tej funkcji w komponencie:
+  const lineChartData = countGrades(grades);
+  console.log("lineChartData", lineChartData);
+  
+  const handleToggleCharts = () => {
+    setIsChartsVisible(!isChartsVisible);
+  };
+  
+
+  const calculatePercentage = () => {
+    console.log("grades:", grades);
+    console.log("selectedGradeForPercentage:", selectedGradeForPercentage);
+    
+    const selectedGrade = parseFloat(selectedGradeForPercentage);
+    console.log("selectedGrade:", selectedGrade);
+  
+    if (!isNaN(selectedGrade)) {
+      const result = percentageNumberOfMarks(grades, selectedGrade);
+      console.log("result:", result);
+  
+      setPercentageResult(`Procentowy udział oceny ${selectedGrade} w zbiorze to ${result.toFixed(2)}%`);
+    } else {
+      setPercentageResult('Wprowadź poprawną ocenę.');
+    }
+  };
+  
+
   return (
+    <>
     <div className="marks-table">
       <table className="table-of-grades">
         <thead>
@@ -437,6 +524,43 @@ export const TableMarks = () => {
           </Button>
         </DialogContent>
       </Dialog>
+
     </div>
+
+    <div className="elements-marks-percentage">
+  <h3>Procentowy udział wybranej oceny w zbiorze wszystkich ocen cząstkowych</h3>
+  <input
+    type="number"
+    placeholder="Wprowadź ocenę"
+    value={selectedGradeForPercentage}
+    onChange={(e) => setSelectedGradeForPercentage(e.target.value)}
+  />
+  <button onClick={() => calculatePercentage()} className="grade-button">Oblicz udział</button>
+  <p>{percentageResult !== null ? percentageResult : ''}</p>
+</div>
+
+
+    <div className="div-button-diagrams"><button onClick={handleToggleCharts} className="grade-button" >
+        {isChartsVisible ? "Ukryj wykresy" : "Pokaż wykresy"}
+      </button></div>
+      {isChartsVisible && (
+      <div className="table-marks-diagram">
+              
+      <div className="diagram-container-header">
+      <h3>Diagram kołowy</h3>
+      <h3>Diagram słupkowy</h3>
+      <h3>Diagram liniowy</h3>
+      </div>
+
+      <div className="diagram-container">
+      <RadialChartComponent data={myData}/>
+      <BarChartComponent barChartData={barChartData} />
+      <LineChartComponent lineChartData={lineChartData} selectedPoint={selectedPoint} setSelectedPoint={setSelectedPoint} />
+      </div>
+
+       
+     </div> 
+     )}
+    </ >
   );
 };

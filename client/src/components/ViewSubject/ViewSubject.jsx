@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { RiMenuFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import "./ViewSubjectStyle.css";
+import sortingSubjects from "../../functionality/sortingSubjects";
+import changeColorTable from "../../functionality/changeColorTable";
 
 export const ViewSubject = ({ grades }) => {
   const [subjects, setSubjects] = useState([]);
@@ -10,8 +12,8 @@ export const ViewSubject = ({ grades }) => {
     try {
       const response = await fetch("http://localhost:3001/subjects");
       const data = await response.json();
-      setSubjects(data);
-    } catch (error) {
+      const sortedSubjects = sortingSubjects(data);
+      setSubjects(sortedSubjects);    } catch (error) {
       console.error('Błąd podczas pobierania danych:', error.message);
     }
   };
@@ -70,7 +72,39 @@ export const ViewSubject = ({ grades }) => {
     }
   };
   
+  const handleColorChange = (subjectId, color) => {
+    // Aktualizuj kolor wiersza tabeli lokalnie
+    const updatedSubjects = subjects.map(subject =>
+      subject._id === subjectId ? { ...subject, color } : subject
+    );
+    setSubjects(updatedSubjects);
+
+    // Aktualizuj kolor w localStorage
+    changeColorTable(subjectId, color);
+  };
   
+  const areSubjectsEqual = (arr1, arr2) => {
+    if (arr1.length !== arr2.length) return false;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i]._id !== arr2[i]._id || arr1[i].color !== arr2[i].color) {
+        return false;
+      }
+    }
+    return true;
+  };
+  
+  useEffect(() => {
+    // Pobierz kolor z localStorage i zaktualizuj stany przedmiotów
+    const updatedSubjects = subjects.map(subject => {
+      const storedColor = localStorage.getItem(`subjectColor_${subject._id}`);
+      return storedColor ? { ...subject, color: storedColor } : subject;
+    });
+  
+    // Sprawdź, czy stan faktycznie się zmienił przed aktualizacją
+    if (!areSubjectsEqual(updatedSubjects, subjects)) {
+      setSubjects(updatedSubjects);
+    }
+  }, [subjects]);
 
 
   return (
@@ -95,14 +129,20 @@ export const ViewSubject = ({ grades }) => {
             </thead>
             <tbody>
               {subjects.map((subject, index) => (
-                <tr key={subject._id} className="subject-row">
+                <tr key={subject._id} className="subject-row" style={{ backgroundColor: subject.color }}> 
                   <td className="table-subject-table-td">{index + 1}</td>
                   <td className="table-subject-table-td">{subject.name}</td>
                   <td className="table-subject-table-td">
                     <button className="button-change-name-of-subject" onClick={() => handleRenameSubject(subject._id)}>Zmień nazwę</button>
                     <button className="button-delete-subject" onClick={() => handleDeleteSubject(subject._id)}>Usuń</button>
-
-                  </td>
+                    <input
+                    type="color"
+                    className="button-change-color"
+                    name="change_color"
+                    value={subject.color} // Przypisanie wartości koloru z aktualnego stanu
+                    onChange={(e) => handleColorChange(subject._id, e.target.value)}
+                  />     
+      </td>
                 </tr>
               ))}
             </tbody>
@@ -112,3 +152,4 @@ export const ViewSubject = ({ grades }) => {
     </div>
   );
 };
+

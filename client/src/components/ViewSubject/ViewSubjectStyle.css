@@ -38,3 +38,14 @@
     margin: 4px 2px;
     cursor: pointer;
 }
+
+.button-change-color{
+    background-color: #1C489D;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 4px 2px;
+    text-align: center;
+
+}
